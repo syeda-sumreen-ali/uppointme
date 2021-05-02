@@ -1,0 +1,3 @@
+const USER_SIGN_UP = 'USER_SIGN_UP ';
+const USER_LOGIN = 'USER_LOGIN ';
+const LOGOUT = 'LOGOUT';
