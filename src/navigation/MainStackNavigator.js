@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import React, {useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import {
   View,
   Alert,
@@ -10,29 +10,18 @@ import {
   Pressable,
   Dimensions,
   TouchableOpacity,
-} from "react-native";
-import Home from "../screens/Home";
-import Detail from "../screens/Detail";
-import Settings from "../screens/Settings";
-import Contact from "../screens/Contact";
+} from 'react-native';
+import Home from '../screens/Home';
+import Detail from '../screens/Detail';
+import Settings from '../screens/Settings';
+import Contact from '../screens/Contact';
 import Register from '../screens/Register';
-import { ICONS} from "../constants"
-// import * as firebase from 'firebase'
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDRKpmhoWOEulUqqwg1xsawHsgMiYp9QCg",
-//   authDomain: "react-native-rn.firebaseapp.com",
-//   projectId: "react-native-rn",
-//   storageBucket: "react-native-rn.appspot.com",
-//   messagingSenderId: "846688386359",
-//   appId: "1:846688386359:web:50271b9f5a3f31ddb86eb2",
-//   measurementId: "G-EXMJYYFJPJ"
-// };
+import Map from '../screens/MapScreen/Map';
+import {ICONS} from '../constants';
 
-// firebase.initializeApp(firebaseConfig);
-// const {Ionicons} = ICONS
 const Stack = createStackNavigator();
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 function MainStackNavigator() {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -46,7 +35,7 @@ function MainStackNavigator() {
               name="settings"
               size={38}
               color="#FFD600"
-              style={{ margin: 5, marginRight: 10 }}
+              style={{margin: 5, marginRight: 10}}
             />
           ),
           headerLeft: () => (
@@ -55,32 +44,40 @@ function MainStackNavigator() {
               name="help-circle"
               size={44}
               color="#FFD600"
-              style={{ marginLeft: 10 }}
+              style={{marginLeft: 10}}
             />
           ),
-          headerTitleAlign: "center",
+          headerTitleAlign: 'center',
           gestureEnabled: true,
           headerStyle: {
-            backgroundColor: "black",
+            backgroundColor: 'black',
           },
           headerTitleStyle: {
-            fontWeight: "bold",
+            fontWeight: 'bold',
             fontSize: 30,
           },
-          headerTintColor: "#ffd700",
+          headerTintColor: '#ffd700',
           headerBackTitleVisible: false,
         }}
         initialRouteName="Register"
-        headerMode="float"
-      >
-        <Stack.Screen name="Register" component={Register}  options={{ headerShown: false }}/>
+        headerMode="float">
+        <Stack.Screen
+          name="MapScreen"
+          component={Map}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="Home"
           component={Home}
           // options={{
           //   title: "Phrase Map",
           // }}
-          options={({ navigation }) => ({
+          options={({navigation}) => ({
             headerRight: () => (
               <View style={styles.centeredView}>
                 <Modal
@@ -88,10 +85,9 @@ function MainStackNavigator() {
                   transparent={true}
                   visible={modalVisible}
                   onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
+                    Alert.alert('Modal has been closed.');
                     setModalVisible(!modalVisible);
-                  }}
-                >
+                  }}>
                   <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                       <TouchableOpacity style={styles.square}>
@@ -106,8 +102,7 @@ function MainStackNavigator() {
                       </TouchableOpacity>
                       <Pressable
                         style={styles.square}
-                        onPress={() => setModalVisible(!modalVisible)}
-                      >
+                        onPress={() => setModalVisible(!modalVisible)}>
                         <Text style={styles.textStyle}>Back</Text>
                       </Pressable>
                       {/* <Pressable
@@ -124,14 +119,13 @@ function MainStackNavigator() {
                 </Modal>
                 <Pressable
                   //style={[styles.button, styles.buttonOpen]}
-                  onPress={() => setModalVisible(true)}
-                >
+                  onPress={() => setModalVisible(true)}>
                   <ICONS.Ionicons
                     // onPress={() => alert("This is a button!")}
                     name="settings"
                     size={38}
                     color="#FFD600"
-                    style={{ marginRight: 10 }}
+                    style={{marginRight: 10}}
                   />
                 </Pressable>
               </View>
@@ -142,19 +136,19 @@ function MainStackNavigator() {
                 name="help-circle"
                 size={44}
                 color="#FFD600"
-                style={{ marginLeft: 10 }}
+                style={{marginLeft: 10}}
               />
             ),
-            headerTitleAlign: "center",
+            headerTitleAlign: 'center',
             gestureEnabled: true,
             headerStyle: {
-              backgroundColor: "black",
+              backgroundColor: 'black',
             },
             headerTitleStyle: {
-              fontWeight: "bold",
+              fontWeight: 'bold',
               fontSize: 30,
             },
-            headerTintColor: "#ffd700",
+            headerTintColor: '#ffd700',
             headerBackTitleVisible: false,
           })}
         />
@@ -165,8 +159,8 @@ function MainStackNavigator() {
           //   //title: route.params.item.name,
           //   title: "",
           // })}
-          options={({ navigation }) => ({
-            title: "Details",
+          options={({navigation}) => ({
+            title: 'Details',
             headerRight: () => (
               <View style={styles.centeredView}>
                 <Modal
@@ -174,10 +168,9 @@ function MainStackNavigator() {
                   transparent={true}
                   visible={modalVisible}
                   onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
+                    Alert.alert('Modal has been closed.');
                     setModalVisible(!modalVisible);
-                  }}
-                >
+                  }}>
                   <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                       <TouchableOpacity style={styles.square}>
@@ -192,8 +185,7 @@ function MainStackNavigator() {
                       </TouchableOpacity>
                       <Pressable
                         style={styles.square}
-                        onPress={() => setModalVisible(!modalVisible)}
-                      >
+                        onPress={() => setModalVisible(!modalVisible)}>
                         <Text style={styles.textStyle}>Back</Text>
                       </Pressable>
                       {/* <Pressable
@@ -210,14 +202,13 @@ function MainStackNavigator() {
                 </Modal>
                 <Pressable
                   //style={[styles.button, styles.buttonOpen]}
-                  onPress={() => setModalVisible(true)}
-                >
+                  onPress={() => setModalVisible(true)}>
                   <ICONS.Ionicons
-                    onPress={() => alert("This is a button!")}
+                    onPress={() => alert('This is a button!')}
                     name="settings"
                     size={38}
                     color="#FFD600"
-                    style={{ marginRight: 10 }}
+                    style={{marginRight: 10}}
                   />
                 </Pressable>
               </View>
@@ -228,32 +219,32 @@ function MainStackNavigator() {
                 name="help-circle"
                 size={44}
                 color="#FFD600"
-                style={{ marginLeft: 10 }}
+                style={{marginLeft: 10}}
               />
             ),
-            headerTitleAlign: "center",
+            headerTitleAlign: 'center',
             gestureEnabled: true,
             headerStyle: {
-              backgroundColor: "black",
+              backgroundColor: 'black',
             },
             headerTitleStyle: {
-              fontWeight: "bold",
+              fontWeight: 'bold',
               fontSize: 30,
             },
-            headerTintColor: "#ffd700",
+            headerTintColor: '#ffd700',
             headerBackTitleVisible: false,
           })}
         />
         <Stack.Screen
           name="Settings"
           component={Settings}
-          options={{ title: "Settings" }}
+          options={{title: 'Settings'}}
         />
         <Stack.Screen
           name="Contact"
           component={Contact}
-          options={({ navigation }) => ({
-            title: "Contacts",
+          options={({navigation}) => ({
+            title: 'Contacts',
             headerRight: () => (
               <View style={styles.centeredView}>
                 <Modal
@@ -261,10 +252,9 @@ function MainStackNavigator() {
                   transparent={true}
                   visible={modalVisible}
                   onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
+                    Alert.alert('Modal has been closed.');
                     setModalVisible(!modalVisible);
-                  }}
-                >
+                  }}>
                   <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                       <TouchableOpacity style={styles.square}>
@@ -279,8 +269,7 @@ function MainStackNavigator() {
                       </TouchableOpacity>
                       <Pressable
                         style={styles.square}
-                        onPress={() => setModalVisible(!modalVisible)}
-                      >
+                        onPress={() => setModalVisible(!modalVisible)}>
                         <Text style={styles.textStyle}>Back</Text>
                       </Pressable>
                       {/* <Pressable
@@ -297,14 +286,13 @@ function MainStackNavigator() {
                 </Modal>
                 <Pressable
                   //style={[styles.button, styles.buttonOpen]}
-                  onPress={() => setModalVisible(true)}
-                >
+                  onPress={() => setModalVisible(true)}>
                   <ICONS.Ionicons
-                    onPress={() => alert("This is a button!")}
+                    onPress={() => alert('This is a button!')}
                     name="settings"
                     size={38}
                     color="#FFD600"
-                    style={{ marginRight: 10 }}
+                    style={{marginRight: 10}}
                   />
                 </Pressable>
               </View>
@@ -315,19 +303,19 @@ function MainStackNavigator() {
                 name="help-circle"
                 size={44}
                 color="#FFD600"
-                style={{ marginLeft: 10 }}
+                style={{marginLeft: 10}}
               />
             ),
-            headerTitleAlign: "center",
+            headerTitleAlign: 'center',
             gestureEnabled: true,
             headerStyle: {
-              backgroundColor: "black",
+              backgroundColor: 'black',
             },
             headerTitleStyle: {
-              fontWeight: "bold",
+              fontWeight: 'bold',
               fontSize: 30,
             },
-            headerTintColor: "#ffd700",
+            headerTintColor: '#ffd700',
             headerBackTitleVisible: false,
           })}
         />
@@ -339,29 +327,29 @@ function MainStackNavigator() {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     //marginTop: 22,
   },
   buttonText: {
     fontSize: 30,
-    fontWeight: "bold",
-    color: "black",
-    alignSelf: "center",
+    fontWeight: 'bold',
+    color: 'black',
+    alignSelf: 'center',
     //transform: [{ rotate: "-45deg" }],
   },
   modalView: {
     height: windowHeight,
     width: windowWidth,
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    shadowColor: "#000",
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -373,12 +361,12 @@ const styles = StyleSheet.create({
   square: {
     width: windowWidth * 0.8,
     height: 60,
-    backgroundColor: "#FFD600",
+    backgroundColor: '#FFD600',
     padding: 2,
     margin: 5,
-    justifyContent: "center",
+    justifyContent: 'center',
     //transform: [{ rotate: "45deg" }],
-    borderColor: "black",
+    borderColor: 'black',
     borderWidth: 4,
   },
   button: {
@@ -387,20 +375,20 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: '#2196F3',
   },
   textStyle: {
     fontSize: 30,
-    color: "black",
-    fontWeight: "400",
-    textAlign: "center",
+    color: 'black',
+    fontWeight: '400',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 

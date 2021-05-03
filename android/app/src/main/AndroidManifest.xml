@@ -2,6 +2,12 @@
   package="com.uppointme">
 
     <uses-permission android:name="android.permission.INTERNET" />
+     
+
+    
+    <uses-permission android:name="android.permission.ACCESS_COURSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
       android:name=".MainApplication"
@@ -10,6 +16,14 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+
+   <meta-data
+     android:name="com.google.android.geo.API_KEY"
+     android:value="AIzaSyBchnNWv36OEeOocuLCfRZOn7T8D3rAAQ8"/>
+
+   <!-- You will also only need to add this uses-library tag -->
+   <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
