@@ -1,7 +1,7 @@
 import React from 'react'
 import  MainStackNavigator from './src/navigation/MainStackNavigator'
-
-
+import {store} from './src/store/store'
+import {Provider} from 'react-redux'
 
 const App = () => {
   return (

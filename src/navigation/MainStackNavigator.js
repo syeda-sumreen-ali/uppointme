@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
@@ -16,17 +16,29 @@ import Detail from '../screens/Detail';
 import Settings from '../screens/Settings';
 import Contact from '../screens/Contact';
 import Register from '../screens/Register';
+import Profile from '../screens/Profile';
 import Map from '../screens/MapScreen/Map';
 import {ICONS} from '../constants';
+// import {isReadyRef, navigationRef,navigate} from './RootNavigation'
 
 const Stack = createStackNavigator();
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
 function MainStackNavigator() {
   const [modalVisible, setModalVisible] = useState(false);
 
+  useEffect(() => {
+      // return () => { isReadyRef.current = false };
+  }, [])
+
   return (
-    <NavigationContainer>
+    <NavigationContainer 
+    // ref={navigationRef}
+    //  onReady={()=>{
+      // isReadyRef.current=true
+    // }} 
+    >
       <Stack.Navigator
         screenOptions={{
           headerRight: () => (
@@ -69,6 +81,11 @@ function MainStackNavigator() {
         <Stack.Screen
           name="Register"
           component={Register}
+          options={{headerShown: false}}
+        />
+         <Stack.Screen
+          name="Profile"
+          component={Profile}
           options={{headerShown: false}}
         />
         <Stack.Screen

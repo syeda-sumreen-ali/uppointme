@@ -1,0 +1,1 @@
+export {addUserDetails,getUserDetails} from './userDetailsActions'

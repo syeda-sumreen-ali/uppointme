@@ -21,7 +21,7 @@ const Register = () => {
   }, []);
 
   const handleRegister = () => {
-    navigation.navigate('MapScreen', {});
+    navigation.navigate('Profile', {});
   };
   return (
     <View style={styles.container}>
