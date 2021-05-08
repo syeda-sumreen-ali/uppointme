@@ -1,0 +1,7 @@
+export {default as Home} from './Home'
+export {default as Detail} from './Detail'
+export {default as Settings} from './Settings'
+export {default as Contact} from './Contact'
+export {default as Profile} from './Profile'
+export {default as Auth} from './Auth'
+export {default as Splash} from './Splash'

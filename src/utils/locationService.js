@@ -9,8 +9,10 @@ export const locateCurrentPosition = () => {
         let initialPosition = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
-          latitudeDelta: 0.09,
-          longitudeDelta: 0.035,
+          // latitudeDelta: 0.09,
+          // longitudeDelta: 0.035,
+          latitudeDelta: 0.04,
+          longitudeDelta: 0.5,
         };
 
         resolve(initialPosition);

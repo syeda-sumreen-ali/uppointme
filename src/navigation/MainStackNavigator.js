@@ -11,78 +11,82 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import Home from '../screens/Home';
-import Detail from '../screens/Detail';
-import Settings from '../screens/Settings';
-import Contact from '../screens/Contact';
-import Register from '../screens/Register';
-import Profile from '../screens/Profile';
-import Map from '../screens/MapScreen/Map';
+import {connect} from 'react-redux'
+import { clearToast, logout} from '../store/actions' 
+import {Home, Contact, Detail, Settings,Profile, Auth, Splash} from '../screens'
 import {ICONS} from '../constants';
-// import {isReadyRef, navigationRef,navigate} from './RootNavigation'
+import {isReadyRef, navigationRef,navigate} from './RootNavigation'
+import {styles} from './styles'
+import {getAppStorage} from '../utils/localstorage'
+import {Toast} from '../component/Toast'
+
 
 const Stack = createStackNavigator();
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
 
-function MainStackNavigator() {
+function MainStackNavigator(props) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [inititalRoute, setInititalRoute]= useState('Auth')
 
-  useEffect(() => {
-      // return () => { isReadyRef.current = false };
+
+  useEffect(async() => {
+    let user = await getAppStorage('auth')
+
+    setInititalRoute(user.length>0 ?(Object.keys(props.user).length>0 ? 'Home' : 'Profile' ) :"Auth")    
+    return () => { isReadyRef.current = false };
+     
   }, [])
 
+  console.log(inititalRoute)
   return (
+    
     <NavigationContainer 
-    // ref={navigationRef}
-    //  onReady={()=>{
-      // isReadyRef.current=true
-    // }} 
-    >
-      <Stack.Navigator
+    ref={navigationRef}
+     onReady={()=>{
+      isReadyRef.current=true
+    }} >
+       {props.isToastShowing &&
+        <Toast 
+          {...props.toastConfig} 
+          isToastShowing={props.isToastShowing}
+          clearToast={() => props.clearToast()}
+        />}
+     <Stack.Navigator
         screenOptions={{
           headerRight: () => (
             <ICONS.Ionicons
-              // onPress={() => alert("This is a button!")}
-              name="settings"
-              size={38}
-              color="#FFD600"
+            // onPress={() => alert("This is a button!")}
+            name="settings"
+            size={38}
+            color="#FFD600"
               style={{margin: 5, marginRight: 10}}
-            />
-          ),
+              />
+              ),
           headerLeft: () => (
             <ICONS.Ionicons
-              // onPress={() => alert("This is a button!")}
-              name="help-circle"
-              size={44}
-              color="#FFD600"
-              style={{marginLeft: 10}}
+            // onPress={() => alert("This is a button!")}
+            name="help-circle"
+            size={44}
+            color="#FFD600"
+            style={{marginLeft: 10}}
             />
-          ),
-          headerTitleAlign: 'center',
-          gestureEnabled: true,
-          headerStyle: {
-            backgroundColor: 'black',
-          },
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 30,
-          },
-          headerTintColor: '#ffd700',
-          headerBackTitleVisible: false,
-        }}
-        initialRouteName="Register"
+            ),
+            headerTitleAlign: 'center',
+            gestureEnabled: true,
+            headerStyle: {
+              backgroundColor: 'black',
+            },
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              fontSize: 30,
+            },
+            headerTintColor: '#ffd700',
+            headerBackTitleVisible: false,
+          }}
+        initialRouteName={'Splash'}
         headerMode="float">
-        <Stack.Screen
-          name="MapScreen"
-          component={Map}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Register"
-          component={Register}
-          options={{headerShown: false}}
-        />
+    
+          <Stack.Screen name="Auth" component={Auth} options={{headerShown: false}}/>
+          <Stack.Screen name="Splash" component={Splash} options={{headerShown: false}}/>
          <Stack.Screen
           name="Profile"
           component={Profile}
@@ -102,7 +106,7 @@ function MainStackNavigator() {
                   transparent={true}
                   visible={modalVisible}
                   onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
+                    // Alert.alert('Modal has been closed.');
                     setModalVisible(!modalVisible);
                   }}>
                   <View style={styles.centeredView}>
@@ -112,16 +116,21 @@ function MainStackNavigator() {
                           <Text style={styles.buttonText}>Favourites</Text>
                         </View>
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.square}>
+                      <TouchableOpacity style={styles.square} onPress={()=>navigation.navigate('Profile')}>
                         <View>
                           <Text style={styles.buttonText}>Profiles</Text>
                         </View>
                       </TouchableOpacity>
-                      <Pressable
+                      <TouchableOpacity
                         style={styles.square}
                         onPress={() => setModalVisible(!modalVisible)}>
                         <Text style={styles.textStyle}>Back</Text>
-                      </Pressable>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.square} onPress={()=>props.logout()}>
+                        <View>
+                          <Text style={styles.textStyle}>Logout</Text>
+                        </View>
+                      </TouchableOpacity>
                       {/* <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => (
@@ -200,6 +209,11 @@ function MainStackNavigator() {
                           <Text style={styles.buttonText}>Profiles</Text>
                         </View>
                       </TouchableOpacity>
+                      <TouchableOpacity onPress={()=>props.logout} style={styles.square}>
+                        <View>
+                          <Text style={styles.buttonText}>Logout</Text>
+                        </View>
+                      </TouchableOpacity>
                       <Pressable
                         style={styles.square}
                         onPress={() => setModalVisible(!modalVisible)}>
@@ -269,8 +283,9 @@ function MainStackNavigator() {
                   transparent={true}
                   visible={modalVisible}
                   onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
+                    // Alert.alert('Modal has been closed.');
                     setModalVisible(!modalVisible);
+
                   }}>
                   <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -305,7 +320,7 @@ function MainStackNavigator() {
                   //style={[styles.button, styles.buttonOpen]}
                   onPress={() => setModalVisible(true)}>
                   <ICONS.Ionicons
-                    onPress={() => alert('This is a button!')}
+                    onPress={() => navigation.goBack()}
                     name="settings"
                     size={38}
                     color="#FFD600"
@@ -337,76 +352,25 @@ function MainStackNavigator() {
           })}
         />
       </Stack.Navigator>
+    
+    
     </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    //marginTop: 22,
-  },
-  buttonText: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'black',
-    alignSelf: 'center',
-    //transform: [{ rotate: "-45deg" }],
-  },
-  modalView: {
-    height: windowHeight,
-    width: windowWidth,
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  square: {
-    width: windowWidth * 0.8,
-    height: 60,
-    backgroundColor: '#FFD600',
-    padding: 2,
-    margin: 5,
-    justifyContent: 'center',
-    //transform: [{ rotate: "45deg" }],
-    borderColor: 'black',
-    borderWidth: 4,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    fontSize: 30,
-    color: 'black',
-    fontWeight: '400',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-});
 
-export default MainStackNavigator;
+
+const mapStateToProps=props=>{
+  const {user, toast}=props
+  return{
+    // user:auth.user,
+    // isUserExist:auth.isUserExist,
+    // isLoading:auth.isLoading,
+    // isFetchingUser:auth.isFetchingUser,
+    user:user.userDetails,
+    isToastShowing: toast.isToastShowing,
+    toastConfig: toast.config,
+  }
+}
+
+export default connect (mapStateToProps, {clearToast, logout})(MainStackNavigator);

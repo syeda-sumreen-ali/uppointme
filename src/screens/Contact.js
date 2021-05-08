@@ -7,36 +7,57 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
+  TouchableHighlight
 } from "react-native";
 import { SearchBar } from "react-native-elements";
+import {connect} from 'react-redux';
+import {getAllContacts}from '../store/actions'
+import {COLORS, ICONS} from '../constants'
+import { getAppStorage } from "../utils/localstorage";
+
 // import * as Contacts from "expo-contacts";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function Contact() {
+const Contact=(props)=> {
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   //console.log("data ye hai " + dataa);
   const [contacts, setContacts] = useState([]);
-  useEffect(() => {
-    (async () => {
-      // const { status } = await Contacts.requestPermissionsAsync();
-      if (status === "granted") {
-        // const { data } = await Contacts.getContactsAsync({
-          // fields: [Contacts.Fields.PhoneNumbers],
-        // });
 
-        if (data.length > 0) {
-          setMasterDataSource(data);
-          setFilteredDataSource(data);
-          setContacts(data);
-          //console.log(data);
-        }
-        //console.log("masterdatasource" + masterDataSource);
+  const getContacts=async()=>{
+    if(props.contactList){
+      console.log("CONTACT+++++++++++++++++++++++++++++++++++++++++++++++++++++",props.contactList)
+      // const user = await getAppStorage('auth')
+      
+     setFilteredDataSource(props.contactList)
+    }
+
+  }
+  useEffect((async () => {
+      // const { status } = await Contacts.requestPermissionsAsync();
+     await props.getAllContacts(()=>getContacts()) 
+     if(search.length === 0){
+       console.log('empty search')
+        setMasterDataSource(props.contactList)
       }
-    })();
-  }, []);
+      // if (status === "granted") {
+      //   // const { data } = await Contacts.getContactsAsync({
+      //     // fields: [Contacts.Fields.PhoneNumbers],
+      //   // });
+
+      //   if (data.length > 0) {
+      //     setMasterDataSource(data);
+      //     setFilteredDataSource(data);
+      //     setContacts(data);
+      //     //console.log(data);
+      //   }
+      //   //console.log("masterdatasource" + masterDataSource);
+      // }
+   
+    }),[props.contactList.length]);
 
   const searchFilterFunction = (text) => {
     // Check if searched text is not blank
@@ -62,27 +83,24 @@ export default function Contact() {
 
   const ItemView = ({ item }) => {
     return (
-      <View>
-        <TouchableOpacity
+      <View style={{marginTop:'5%'}}>
+        <TouchableHighlight
           style={styles.square}
           onPress={() => getItem(item)}
           //onPress={() => navigation.navigate("Home")}
         >
-          <View>
+          <View style={{flexDirection:'row', justifyContent:'space-between', paddingHorizontal:'6%'}}> 
             <Text
               adjustsFontSizeToFit={true}
               minimumFontScale={0.1}
               style={styles.buttonText}
-            >{`${item.name}  `}</Text>
-            {/* <Text style={styles.buttonText}>{`(${
-              item.phoneNumbers ? item.phoneNumbers[0].number : ""
-            })`}</Text> */}
-            {/* <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-                {item.id}
-                {"."}
-              </Text> */}
+            >{item.name}</Text>
+            <TouchableOpacity onPress={()=>alert(123)}>
+              <ICONS.MaterialIcons name={'favorite-outline'} size={30} color={COLORS.dark}/>
+            </TouchableOpacity>
+        
           </View>
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
     );
   };
@@ -104,7 +122,7 @@ export default function Contact() {
     // Function for click on an item
     // alert("Id : " + item.id + " Title : " + item.name);
     alert(
-      "Name: " + item.name + `\n` + "Number : " + item.phoneNumbers[0].number
+      // "Name: " + item.name + `\n` + "Number : " + item.phoneNumbers[0].number
     );
   };
 
@@ -122,16 +140,32 @@ export default function Contact() {
         />
       </View>
 
+      {props.isContactLoading?
+
       <View style={styles.container}>
+        <View>
+          <ActivityIndicator color={COLORS.primary} size={35}/>
+        </View>
+      </View>
+      :<View style={styles.container}>
         <FlatList
           data={filteredDataSource}
           keyExtractor={(item, index) => index.toString()}
           renderItem={ItemView}
         />
-      </View>
+      </View>}
     </SafeAreaView>
   );
 }
+const mapStateToProps = props => {
+  const {user}=props
+  return{
+    isContactLoading:user.isContactLoading,
+    contactList:user.contactList
+  }
+}
+
+export default connect(mapStateToProps, {getAllContacts})(Contact)
 
 const styles = StyleSheet.create({
   container: {
@@ -164,6 +198,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFD600",
     padding: 2,
     margin: 5,
+
     justifyContent: "center",
     //transform: [{ rotate: "45deg" }],
     borderColor: "black",
