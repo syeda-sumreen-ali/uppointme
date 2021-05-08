@@ -82,7 +82,7 @@ export class Map extends Component {
 		if (Platform.OS === "android") {
 			LocationServicesDialogBox.checkLocationServicesIsEnabled({
 				message:
-					'<h2>Use Location? </h2> Kitchen Konnection wants to access your location',
+					'<h2>Use Location? </h2> Uppointme wants to access your location',
 				ok: 'YES',
 				cancel: 'NO',
 				enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => GPS OR NETWORK PROVIDER
@@ -97,7 +97,7 @@ export class Map extends Component {
 						// success => {alreadyEnabled: true, enabled: true, status: "enabled"}
 						Geolocation.getCurrentPosition(
 							(position) => {
-								// console.log(position);
+								console.log(position);
 
 								INITIAL_MAP_REGION = {
 									latitude: position.coords.latitude,
@@ -116,8 +116,8 @@ export class Map extends Component {
                                     longitude: position.coords.longitude,
                                 }));
 							},
-							(error) => console.log(error),
-							{ enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
+							(error) => console.log("ERRORRRR",error),
+							{ enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
 						);
 					}.bind(this),
 				)
@@ -159,7 +159,7 @@ export class Map extends Component {
   
     componentDidMount() {
       
-    !this.props.location? this.Geolocation():this.setState({
+    !this.props.location?()=> this.Geolocation():this.setState({
 			region: {
 				latitude: this.props.location.latitude,
 				longitude: this.props.location.longitude,

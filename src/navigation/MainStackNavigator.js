@@ -15,9 +15,8 @@ import {connect} from 'react-redux'
 import { clearToast, logout} from '../store/actions' 
 import {Home, Contact, Detail, Settings,Profile, Auth, Splash} from '../screens'
 import {ICONS} from '../constants';
-import {isReadyRef, navigationRef,navigate} from './RootNavigation'
+import {isReadyRef, navigationRef} from './RootNavigation'
 import {styles} from './styles'
-import {getAppStorage} from '../utils/localstorage'
 import {Toast} from '../component/Toast'
 
 
@@ -25,18 +24,11 @@ const Stack = createStackNavigator();
 
 function MainStackNavigator(props) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [inititalRoute, setInititalRoute]= useState('Auth')
-
 
   useEffect(async() => {
-    let user = await getAppStorage('auth')
-
-    setInititalRoute(user.length>0 ?(Object.keys(props.user).length>0 ? 'Home' : 'Profile' ) :"Auth")    
-    return () => { isReadyRef.current = false };
-     
+    return () => { isReadyRef.current = false };   
   }, [])
 
-  console.log(inititalRoute)
   return (
     
     <NavigationContainer 

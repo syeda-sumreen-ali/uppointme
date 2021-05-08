@@ -10,7 +10,7 @@ import * as Animatable from 'react-native-animatable';
 const Splash = (props) => {
 
   const  navigateToProfileOrHome=()=>{
-      console.log("Object.keys(props.user).length===0",Object.keys(props.user).length===0, props.user)
+    //   console.log("Object.keys(props.user).length===0",Object.keys(props.user).length===0, props.user)
         setTimeout(() => {
             if(Object.keys(props.user).length===0){
                 props.navigation.replace('Profile')

@@ -21,11 +21,7 @@ export const  addUserDetails= (data)=>async(dispatch)=>{
         .then(() => {
              dispatch(setToast('success', 'Profile added successfully'))
              dispatch({type:types.ADD_USER_DETAILS_SUCCESS, payload :data})
-            }).then(()=> {
-                setTimeout(() => {
-                    navigationRef.current.navigate('Home')
-                }, 4000);
-            })
+            }).then(()=> navigationRef.current.navigate('Home'))
             .catch((err) =>{  throw err; })
 
     } catch (error) {

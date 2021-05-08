@@ -53,6 +53,7 @@ export const login=(email, password)=>async(dispatch)=>{
   .signInWithEmailAndPassword(email,password)
   .then((user) => {
       dispatch({type:types.LOGIN, payload:user})
+      dispatch(updateTokenInProfile())
       console.log("user logged in", user.user._user.uid)
       setAppStorage('auth',user.user._user.uid)
         // console.log(store.getState())
@@ -68,6 +69,21 @@ export const login=(email, password)=>async(dispatch)=>{
     console.error(error);
   });
  }
+
+
+ export const updateTokenInProfile = () => async () => {
+  let userid = await getAppStorage('auth');
+  console.log("UPDATE TOKEN CALLEDDDD")
+  firestore()
+    .collection('Users')
+    .doc(userid)
+    .update({
+      token: await NotificationService.getToken(),
+    })
+    .then(() => {
+      console.log('token updated successfully');
+    });
+};
 
  export const logout = ()=>async(dispatch)=>{
   auth()

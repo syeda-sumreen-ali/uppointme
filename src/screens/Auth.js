@@ -19,16 +19,15 @@ const Auth = (props) => {
   const [pageType, setPageType]= useState('signin')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigation = useNavigation();
 
    const  navigateToProfileOrHome=()=>{
-        setTimeout(() => {
-            if(!Object.keys(props.user)){
-                props.navigation.replace('Profile')
-            }else{
-                props.navigation.replace('Home')
-            }
-        }, 5000);
+       
+    if(!Object.keys(props.user)){
+        props.navigation.replace('Profile')
+    }else{
+        props.navigation.replace('Home')
+    }
+        
     }
   useEffect(async() => {
     NotificationService.getToken();
