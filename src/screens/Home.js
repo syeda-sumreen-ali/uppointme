@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   StyleSheet,
   View,
@@ -12,22 +12,23 @@ const character = {
   home: "Tatooine",
   species: "human",
 };
-import GLOBAL from "../Global/global";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 function Home(props) {
   const { navigation } = props;
+  const [how,setHow] = useState('')
+  const [who, setWho] = useState('')
+  const [where, setWhere] = useState('')
 
-  // const { data } = route.params;
-  //const { send, bring, goto } = data;
-  console.log(GLOBAL.whatt);
+  console.log(how)
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.square}
-        onPress={() => navigation.navigate("Detail", { item: character })}
+        onPress={() => navigation.navigate("Detail", { item: character, how , setHow })}
       >
         <View>
           {/* <Text style={styles.buttonText}>What {character.name}?</Text> */}

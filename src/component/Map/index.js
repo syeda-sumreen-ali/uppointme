@@ -82,7 +82,7 @@ export class Map extends Component {
 		if (Platform.OS === "android") {
 			LocationServicesDialogBox.checkLocationServicesIsEnabled({
 				message:
-					'<h2>Use Location? </h2> Uppointme wants to access your location',
+					'<h2>Use Location? </h2> Kitchen Konnection wants to access your location',
 				ok: 'YES',
 				cancel: 'NO',
 				enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => GPS OR NETWORK PROVIDER
@@ -116,8 +116,8 @@ export class Map extends Component {
                                     longitude: position.coords.longitude,
                                 }));
 							},
-							(error) => console.log("ERRORRRR",error),
-							{ enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+							(error) => console.log(error),
+							{ enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
 						);
 					}.bind(this),
 				)
@@ -140,7 +140,7 @@ export class Map extends Component {
 	};
 
 	static getDerivedStateFromProps=(props,state)=>{
-		if(props.location.latitude){
+		if(props.location && props.location.latitude){
 			return{
 				userLocation:props.location,
 				region:{
@@ -158,8 +158,8 @@ export class Map extends Component {
 
   
     componentDidMount() {
-      
-    !this.props.location?()=> this.Geolocation():this.setState({
+      console.log("this.props.location",this.props.location)
+    !this.props.location? this.Geolocation():this.setState({
 			region: {
 				latitude: this.props.location.latitude,
 				longitude: this.props.location.longitude,
@@ -186,7 +186,7 @@ export class Map extends Component {
 		}
 		// INITIAL_MAP_REGION = region
 		this.setState({ userLocation: user, region },()=>this.props.setLocation(user))
-		console.log(" onUserLocationInputChange","region",region)
+		// console.log(" onUserLocationInputChange","region",region)
 		// this.props.locationSave(region);
 
 	}
@@ -213,7 +213,7 @@ export class Map extends Component {
 		const {userLocation,region} = this.state;
         console.log("userLocation:",userLocation)
 		console.log("this.propsss", this.props.location)
-		console.log("region",this.state.region)
+		// console.log("region",this.state.region)
         return (
             <View>
                 {/* <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" /> */}

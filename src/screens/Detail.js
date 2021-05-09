@@ -19,6 +19,7 @@ const Detail = (props) => {
   const { item } = route.params;
   const { name, home, species } = item;
 
+  console.log('props====================', route.params)
   return (
     <View style={styles.container}>
       <View style={{ margin: 10 }}>
@@ -38,8 +39,10 @@ const Detail = (props) => {
       <View style={{ marginTop: 20 }}>
         <TouchableOpacity
           style={styles.square}
-          // onPress={() => (GLOBAL.whatt = "send")}
-          onPress={() => navigation.navigate("Home")}
+          
+          onPress={() => {
+            props.route.params.setHow('Send')
+            navigation.navigate("Home")}}
         >
           <View>
             <Text style={styles.buttonText}>Send</Text>
@@ -47,7 +50,9 @@ const Detail = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.square}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => {
+            props.route.params.setHow('Bring')
+            navigation.navigate("Home")}}
         >
           <View>
             <Text style={styles.buttonText}>Bring</Text>

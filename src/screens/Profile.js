@@ -25,11 +25,11 @@ const Profile = (props) => {
 
 
     const handleSubmit =()=>{
-      if(Object.keys(props.user.userDetails).length){
+      // if(Object.keys(props.user.userDetails).length){
         props.updateUserDetails({name:userName,location:location})
-      }else{
-        props.addUserDetails({name:userName, location:location})
-      }
+      // }else{
+        // props.addUserDetails({name:userName, location:location})
+      // }
     }
     return (
       // <ScrollView>
@@ -43,7 +43,7 @@ const Profile = (props) => {
              </TouchableOpacity>
             </View>}
             <View style={[{flex:1}, !props.user.userDetails&&{alignItems:'center'}]}>
-              <Text style={styles.h1}>{props.user.userDetails?'Edit Profile':'Create Profile'}</Text>
+              <Text style={styles.h1}>{props.user.userDetails.name?'Edit Profile':'Create Profile'}</Text>
             </View>
 
            

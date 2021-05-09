@@ -11,7 +11,7 @@ export default (state=initialState, {type,payload})=>{
         case types.ADD_USER_DETAILS_SUCCESS:
             return{...state,userDetails:payload}
         case types.GET_USER_DETAILS_SUCCESS:
-            console.log('eeeeee', payload)
+            // console.log('eeeeee', payload)
             return{...state, userDetails : payload}
         case types.GET_ALL_CONTACTS_START:
             return {...state, isContactLoading:true}
@@ -19,6 +19,8 @@ export default (state=initialState, {type,payload})=>{
             return {...state, isContactLoading:false, contactList:payload}
         case types.GET_ALL_CONTACTS_FAILED:
             return {...state, isContactLoading:false}
+        case types.HANDLE_FAVOURITE:
+            return{...state, userDetails:{...userDetails,favourites:payload}}
         case types.LOGOUT:
             return{...state,userDetails:{}}
         default:

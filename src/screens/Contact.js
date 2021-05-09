@@ -12,11 +12,10 @@ import {
 } from "react-native";
 import { SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
-import {getAllContacts}from '../store/actions'
+import {getAllContacts,  handleFavourite}from '../store/actions'
 import {COLORS, ICONS} from '../constants'
 import { getAppStorage } from "../utils/localstorage";
 
-// import * as Contacts from "expo-contacts";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -24,48 +23,43 @@ const Contact=(props)=> {
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
-  //console.log("data ye hai " + dataa);
   const [contacts, setContacts] = useState([]);
 
   const getContacts=async()=>{
     if(props.contactList){
-      console.log("CONTACT+++++++++++++++++++++++++++++++++++++++++++++++++++++",props.contactList)
-      // const user = await getAppStorage('auth')
-      
      setFilteredDataSource(props.contactList)
     }
 
   }
   useEffect((async () => {
-      // const { status } = await Contacts.requestPermissionsAsync();
      await props.getAllContacts(()=>getContacts()) 
-     if(search.length === 0){
-       console.log('empty search')
-        setMasterDataSource(props.contactList)
-      }
-      // if (status === "granted") {
-      //   // const { data } = await Contacts.getContactsAsync({
-      //     // fields: [Contacts.Fields.PhoneNumbers],
-      //   // });
 
-      //   if (data.length > 0) {
-      //     setMasterDataSource(data);
-      //     setFilteredDataSource(data);
-      //     setContacts(data);
-      //     //console.log(data);
-      //   }
-      //   //console.log("masterdatasource" + masterDataSource);
-      // }
-   
+    let arr = props.contactList
+    let myfavourites = props.userDetails.favourites||[]
+    console.log("myfavourites",myfavourites)
+    arr.map((item)=>{
+      myfavourites.map(item2=>{
+        if(item.id ===item2.id){
+          item.liked=true
+          console.log('I like you ')
+        }else{
+          item.liked=false
+          console.log('I don\'t like you')
+        }
+      })
+    })
+
+    console.log(arr)
+
+    if(search.length === 0){
+       setMasterDataSource(arr)
+     }
+
+     console.log(props.contactList)
     }),[props.contactList.length]);
 
   const searchFilterFunction = (text) => {
-    // Check if searched text is not blank
-    if (text) {
-      //console.log("masterdatasource");
-      // Inserted text is not blank
-      // Filter the masterDataSource
-      // Update FilteredDataSource
+    if (text) {    
       const newData = masterDataSource.filter(function (item) {
         const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
         const textData = text.toUpperCase();
@@ -74,13 +68,34 @@ const Contact=(props)=> {
       setFilteredDataSource(newData);
       setSearch(text);
     } else {
-      // Inserted text is blank
-      // Update FilteredDataSource with masterDataSource
       setFilteredDataSource(masterDataSource);
       setSearch(text);
     }
   };
 
+  const handleFavourite = (item)=>{
+    // console.log("hndleFavourite",item.favourites)
+    console.log(props.userDetails)
+    let favourites= props.userDetails.favourites||[]
+    let type= 'add'
+    if(!favourites.length){
+      favourites.push(item)
+    }else{
+      favourites.map((person,index)=>{
+        if(person.id===item.id){
+          favourites= favourites.splice(index,0)
+          type ='remove'
+          // console.log("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",favourites)
+        }else{
+          favourites.push(item)
+        }
+      })
+    }
+    props.handleFavourite(favourites,type)
+    // console.log("favourites",favourites)
+    
+
+  }
   const ItemView = ({ item }) => {
     return (
       <View style={{marginTop:'5%'}}>
@@ -95,8 +110,8 @@ const Contact=(props)=> {
               minimumFontScale={0.1}
               style={styles.buttonText}
             >{item.name}</Text>
-            <TouchableOpacity onPress={()=>alert(123)}>
-              <ICONS.MaterialIcons name={'favorite-outline'} size={30} color={COLORS.dark}/>
+            <TouchableOpacity onPress={()=>handleFavourite(item)}>
+              <ICONS.MaterialIcons name={item.liked?'favorite':'favorite-outline'} size={30} color={COLORS.dark}/>
             </TouchableOpacity>
         
           </View>
@@ -161,11 +176,12 @@ const mapStateToProps = props => {
   const {user}=props
   return{
     isContactLoading:user.isContactLoading,
-    contactList:user.contactList
+    contactList:user.contactList,
+    userDetails:user.userDetails
   }
 }
 
-export default connect(mapStateToProps, {getAllContacts})(Contact)
+export default connect(mapStateToProps, {getAllContacts, handleFavourite})(Contact)
 
 const styles = StyleSheet.create({
   container: {

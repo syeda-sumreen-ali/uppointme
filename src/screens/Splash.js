@@ -9,14 +9,11 @@ import * as Animatable from 'react-native-animatable';
 
 const Splash = (props) => {
 
-  const  navigateToProfileOrHome=()=>{
-    //   console.log("Object.keys(props.user).length===0",Object.keys(props.user).length===0, props.user)
+  const  navigateToProfileOrHome=(page)=>{
+      console.log("Object.keys(props.user).length===0",Object.keys(props.user).length===0, props.user)
         setTimeout(() => {
-            if(Object.keys(props.user).length===0){
-                props.navigation.replace('Profile')
-            }else{
-                props.navigation.replace('Home')
-            }
+            console.log(page)
+            props.navigation.replace(page)
         }, 5000);
     }
     useEffect(async() => {
@@ -27,10 +24,10 @@ const Splash = (props) => {
                 props.navigation.replace('Auth')
             }, 5000);
         }else{
-            await props.getUserDetails(()=>navigateToProfileOrHome())
+            await props.getUserDetails((page)=>navigateToProfileOrHome(page))
         }
     }, [])
-    console.log(props)
+    // console.log(props)
     return (
         <Animatable.View
 				animation={"fadeIn"}
@@ -52,7 +49,7 @@ const Splash = (props) => {
 
 const mapStateToProps= props=>{
     return{
-        user:props.user.userDetails,
+        user:props.user,
         isLoggedIn:props.auth.isLoggedIn
     }
 }

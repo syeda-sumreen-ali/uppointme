@@ -1,3 +1,3 @@
-export {addUserDetails, getAllContacts, getUserDetails, updateUserDetails} from './userDetailsActions'
-export {setToast, clearToast} from './toastAction'
-export {register, login, logout} from './authActions'
+export * from './userDetailsActions'
+export * from './toastAction'
+export * from './authActions'

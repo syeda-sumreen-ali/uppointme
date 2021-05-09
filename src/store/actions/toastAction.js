@@ -2,7 +2,7 @@ import { types } from '../actionTypes'
 
 export const setToast = (status, message, duration) => dispatch => {
 	try {
-console.log('calll')
+// console.log('calll')
 		dispatch({
 			type: types.SHOW_TOAST, payload: {
 				status,
