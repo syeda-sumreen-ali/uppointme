@@ -64,7 +64,7 @@ export const updateUserDetails =(data)=>async(dispatch)=>{
             location:data.location
         })
         dispatch({type:types.UPDATE_USER_DETAILS_SUCCESS,payload:data})
-        dispatch(setToast('success','Profile added successfully'))
+        dispatch(setToast('success','Profile updated successfully'))
         setTimeout(() => {
             navigationRef.current.navigate('Home')
         }, 4000);

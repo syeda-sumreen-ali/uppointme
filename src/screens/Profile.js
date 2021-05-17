@@ -14,6 +14,7 @@ const Profile = (props) => {
     useEffect(async() => {
      await props.getUserDetails(()=>{
        let userInfo= props.user.userDetails
+       console.log("USER INFO", userInfo)
       if(Object.keys(userInfo).length){
           setUserName(userInfo.name)
           setLocation(userInfo.location)

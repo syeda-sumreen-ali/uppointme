@@ -1,108 +1,82 @@
-import React, { useState, useEffect } from "react";
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  View,
-  FlatList,
-  TouchableOpacity,
-  Dimensions,
-  ActivityIndicator,
-  TouchableHighlight
-} from "react-native";
-import { SearchBar } from "react-native-elements";
-import {connect} from 'react-redux';
-import {getAllContacts,  handleFavourite}from '../store/actions'
+import React from 'react'
+import { StyleSheet,FlatList,TouchableHighlight, Dimensions, TouchableOpacity,  ActivityIndicator, Text, View } from 'react-native'
+import {connect} from 'react-redux'
+import { getUserDetails, getAllContacts,  handleFavourite , setPushNotificationData } from "../store/actions";
 import {COLORS, ICONS} from '../constants'
-import { getAppStorage } from "../utils/localstorage";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const Contact=(props)=> {
-  const [search, setSearch] = useState("");
-  const [filteredDataSource, setFilteredDataSource] = useState([]);
-  const [masterDataSource, setMasterDataSource] = useState([]);
-  const [contacts, setContacts] = useState([]);
 
-  const getContacts=async()=>{
-    if(props.contactList){
-     setFilteredDataSource(props.contactList)
+const Contact = (props) => {
+  
+  const [List, setList] = React.useState([])
+  const {getAllContacts, getUserDetails, handleFavourite, contactList, userDetails, isContactLoading} = props
+  
+  console.log("props.route.params",props.route.params)
+  React.useEffect(async () => {
+
+   if(props.route.params === undefined){
+    setList(userDetails.favourites)
+   } 
+  if(props.route.params!==undefined && props.route.params.from==='contact'){
+      await getAllContacts(()=>setList(contactList))
+      let myfavourites = props.userDetails.favourites||[]    
+      let arr = props.contactList
+      arr.map((item)=>{
+        myfavourites.map(item2=>{
+          if(item.id ===item2.id){
+            item.liked=true
+          }
+        })
+      })    
+        setList(arr)
     }
+  }, [props.contactList.length, props.userDetails.favourites.length])
+  
 
-  }
-  useEffect((async () => {
-     await props.getAllContacts(()=>getContacts()) 
+  const onChangeFavourite = (item)=>{
 
-    let arr = props.contactList
-    let myfavourites = props.userDetails.favourites||[]
-    console.log("myfavourites",myfavourites)
-    arr.map((item)=>{
-      myfavourites.map(item2=>{
-        if(item.id ===item2.id){
-          item.liked=true
-          console.log('I like you ')
-        }else{
-          item.liked=false
-          console.log('I don\'t like you')
-        }
-      })
-    })
+    //if item is in favourites remove it from list else add it
 
-    console.log(arr)
-
-    if(search.length === 0){
-       setMasterDataSource(arr)
-     }
-
-     console.log(props.contactList)
-    }),[props.contactList.length]);
-
-  const searchFilterFunction = (text) => {
-    if (text) {    
-      const newData = masterDataSource.filter(function (item) {
-        const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
-        const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1;
-      });
-      setFilteredDataSource(newData);
-      setSearch(text);
-    } else {
-      setFilteredDataSource(masterDataSource);
-      setSearch(text);
-    }
-  };
-
-  const handleFavourite = (item)=>{
-    // console.log("hndleFavourite",item.favourites)
-    console.log(props.userDetails)
-    let favourites= props.userDetails.favourites||[]
+    let favorite = props.userDetails.favourites||[]
     let type= 'add'
-    if(!favourites.length){
-      favourites.push(item)
-    }else{
-      favourites.map((person,index)=>{
-        if(person.id===item.id){
-          favourites= favourites.splice(index,0)
-          type ='remove'
-          // console.log("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",favourites)
-        }else{
-          favourites.push(item)
-        }
-      })
-    }
-    props.handleFavourite(favourites,type)
-    // console.log("favourites",favourites)
     
+    if(!favorite.length){
+      favorite.push(item)
+    }
+    else{  
+      let before = favorite.length
+      
+      favorite = favorite.filter(item2 => item2.id !== item.id)
+      
+      if(favorite.length !== before){
+        type ='remove'
+        before = favorite.length
+      }else{
+        type ='add'
+        favorite.push(item)
+        before = favorite.length
+      }
 
+    //  console.log("favorite",favorite) 
+    handleFavourite(favorite,type)
+    }
+  
   }
-  const ItemView = ({ item }) => {
+
+  const ItemView = ({item}) =>{
+    
     return (
       <View style={{marginTop:'5%'}}>
         <TouchableHighlight
           style={styles.square}
-          onPress={() => getItem(item)}
-          //onPress={() => navigation.navigate("Home")}
+          onPress={() => {
+            props.setPushNotificationData(item,props.route.params!==undefined&& props.route.params.from === 'contact'?'who':'where' ) 
+            props.navigation.navigate("Home")
+          }
+          }
         >
           <View style={{flexDirection:'row', justifyContent:'space-between', paddingHorizontal:'6%'}}> 
             <Text
@@ -110,78 +84,44 @@ const Contact=(props)=> {
               minimumFontScale={0.1}
               style={styles.buttonText}
             >{item.name}</Text>
-            <TouchableOpacity onPress={()=>handleFavourite(item)}>
+            {(props.route.params!==undefined&& props.route.params.from === 'contact')&&<TouchableOpacity onPress={()=>onChangeFavourite(item)}>
               <ICONS.MaterialIcons name={item.liked?'favorite':'favorite-outline'} size={30} color={COLORS.dark}/>
-            </TouchableOpacity>
+            </TouchableOpacity>}
         
           </View>
         </TouchableHighlight>
       </View>
-    );
-  };
-
-  const ItemSeparatorView = () => {
-    return (
-      // Flat List Item Separator
-      <View
-        style={{
-          height: 0.5,
-          width: "100%",
-          backgroundColor: "#C8C8C8",
-        }}
-      />
-    );
-  };
-
-  const getItem = (item) => {
-    // Function for click on an item
-    // alert("Id : " + item.id + " Title : " + item.name);
-    alert(
-      // "Name: " + item.name + `\n` + "Number : " + item.phoneNumbers[0].number
-    );
-  };
-
+      )
+    }
+    
+    // console.log("zzzzzzzzzzzzzzzz",List)
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View>
-        <SearchBar
-          containerStyle={{ backgroundColor: "black" }}
-          round
-          searchIcon={{ size: 24 }}
-          onChangeText={(text) => searchFilterFunction(text)}
-          onClear={(text) => searchFilterFunction("")}
-          placeholder="Search Contact"
-          value={search}
-        />
-      </View>
-
-      {props.isContactLoading?
-
+   
       <View style={styles.container}>
-        <View>
-          <ActivityIndicator color={COLORS.primary} size={35}/>
-        </View>
-      </View>
-      :<View style={styles.container}>
+      {/* {isContactLoading?  <ActivityIndicator size={40} color={COLORS.primary}/>: */}
         <FlatList
-          data={filteredDataSource}
+          data={List}
           keyExtractor={(item, index) => index.toString()}
           renderItem={ItemView}
         />
-      </View>}
-    </SafeAreaView>
-  );
+      {/* } */}
+      </View> 
+  )
+
 }
+
 const mapStateToProps = props => {
-  const {user}=props
+  const {user} = props
   return{
-    isContactLoading:user.isContactLoading,
-    contactList:user.contactList,
-    userDetails:user.userDetails
+    contactList : user.contactList,
+    isContactLoading : user.isContactLoading,
+    userDetails : user.userDetails
   }
 }
 
-export default connect(mapStateToProps, {getAllContacts, handleFavourite})(Contact)
+
+
+export default connect(mapStateToProps,{getAllContacts,getUserDetails,handleFavourite, setPushNotificationData})(Contact)
 
 const styles = StyleSheet.create({
   container: {

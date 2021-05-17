@@ -10,27 +10,48 @@ import {
   Pressable,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import {connect} from 'react-redux'
 import { clearToast, logout} from '../store/actions' 
-import {Home, Contact, Detail, Settings,Profile, Auth, Splash} from '../screens'
-import {ICONS} from '../constants';
+import {Home, Contact, Detail,  Settings,Profile, Auth, Splash} from '../screens'
+import {COLORS, ICONS} from '../constants';
 import {isReadyRef, navigationRef} from './RootNavigation'
 import {styles} from './styles'
 import {Toast} from '../component/Toast'
+import messaging from '@react-native-firebase/messaging'
 
 
 const Stack = createStackNavigator();
 
 function MainStackNavigator(props) {
   const [modalVisible, setModalVisible] = useState(false);
-
+const [loading, setLoading] = useState(true);
+const [inititalRoute, setInititalRoute] = useState('Splash')
   useEffect(async() => {
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log('Notification caused app to open from background state',
+      remoteMessage.notification)
+      navigation.navigate(remoteMessage.data.type);
+    });
+
+    (await messaging().getInitialNotification())
+    .then(remoteMessage=>{
+      if(remoteMessage){
+        console.log('Notification caused app to open from quit state:',
+        remoteMessage.notification)
+        setInitialroute(remoteMessage.data.type)
+      }
+setLoading(false);
+    })
+
     return () => { isReadyRef.current = false };   
+
   }, [])
 
   return (
-    
+ 
+    loading? <ActivityIndicator loading={true} size={45} color={COLORS.primary}/> :
     <NavigationContainer 
     ref={navigationRef}
      onReady={()=>{
@@ -74,7 +95,7 @@ function MainStackNavigator(props) {
             headerTintColor: '#ffd700',
             headerBackTitleVisible: false,
           }}
-        initialRouteName={'Splash'}
+        initialRouteName={inititalRoute}
         headerMode="float">
     
           <Stack.Screen name="Auth" component={Auth} options={{headerShown: false}}/>
@@ -347,6 +368,8 @@ function MainStackNavigator(props) {
     
     
     </NavigationContainer>
+  
+  
   );
 }
 

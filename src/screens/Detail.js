@@ -6,20 +6,17 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import GLOBAL from "../Global/global";
-const what = {
-  send: "Send",
-  bring: "bring",
-  goto: "go to",
-};
+
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-const Detail = (props) => {
-  const { route, navigation } = props;
-  const { item } = route.params;
-  const { name, home, species } = item;
+import {connect} from 'react-redux'
+import {setPushNotificationData} from '../store/actions'
 
-  console.log('props====================', route.params)
+const Detail = (props) => {
+  const { navigation } = props;
+  let arr = ['send', 'bring', 'got to', 'find', 'search','follow']
+
   return (
     <View style={styles.container}>
       <View style={{ margin: 10 }}>
@@ -37,65 +34,31 @@ const Detail = (props) => {
         </Text>
       </View>
       <View style={{ marginTop: 20 }}>
-        <TouchableOpacity
-          style={styles.square}
-          
-          onPress={() => {
-            props.route.params.setHow('Send')
-            navigation.navigate("Home")}}
-        >
-          <View>
-            <Text style={styles.buttonText}>Send</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
+
+       {arr.map((item)=>(
+
+        <TouchableOpacity 
           style={styles.square}
           onPress={() => {
-            props.route.params.setHow('Bring')
-            navigation.navigate("Home")}}
+            props.setPushNotificationData(item, 'how')
+            props.navigation.navigate('Home')
+          } }
         >
           <View>
-            <Text style={styles.buttonText}>Bring</Text>
+            <Text style={styles.buttonText}>{item}</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square}>
-          <View>
-            <Text style={styles.buttonText}>Go To</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.square}>
-          <View>
-            <Text style={styles.buttonText}>Find</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.square}>
-          <View>
-            <Text style={styles.buttonText}>Search</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.square}>
-          <View>
-            <Text style={styles.buttonText}>Follow</Text>
-          </View>
-        </TouchableOpacity>
+       )
+      )}
       </View>
     </View>
-    // <View style={styles.container}>
-    //   <Text style={styles.text}>Detail Screen</Text>
-    //   <View style={styles.card}>
-    //     <Text style={styles.cardText}>Name: {name}</Text>
-    //     <Text style={styles.cardText}>Home Planet: {home}</Text>
-    //     <Text style={styles.cardText}>Species: {species}</Text>
-    //   </View>
-    //   <TouchableOpacity
-    //     style={styles.buttonContainer}
-    //     onPress={() => navigation.navigate('Settings')}>
-    //     <Text style={styles.buttonText}>Go to Settings</Text>
-    //   </TouchableOpacity>
-    // </View>
+ 
   );
 };
 
+
+
+export default connect(null, {setPushNotificationData})(Detail);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -118,6 +81,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color: "black",
+    textTransform:'capitalize',
     alignSelf: "center",
     //transform: [{ rotate: "-45deg" }],
   },
@@ -132,41 +96,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 4,
   },
-  // container: {
-  //   flex: 1,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   backgroundColor: "#ebebeb",
-  // },
-  // text: {
-  //   color: "#101010",
-  //   fontSize: 24,
-  //   fontWeight: "bold",
-  // },
-  // card: {
-  //   width: 350,
-  //   height: 100,
-  //   borderRadius: 10,
-  //   backgroundColor: "#101010",
-  //   margin: 10,
-  //   padding: 10,
-  //   alignItems: "center",
-  // },
-  // cardText: {
-  //   fontSize: 18,
-  //   color: "#ffd700",
-  //   marginBottom: 5,
-  // },
-  // buttonContainer: {
-  //   backgroundColor: "#222",
-  //   borderRadius: 5,
-  //   padding: 10,
-  //   margin: 20,
-  // },
-  // buttonText: {
-  //   fontSize: 20,
-  //   color: "#fff",
-  // },
+  
 });
 
-export default Detail;

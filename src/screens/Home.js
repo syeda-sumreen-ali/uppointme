@@ -1,37 +1,27 @@
-import React, {useState} from "react";
+import React from "react";
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
-  Dimensions,
 } from "react-native";
-
-const character = {
-  name: "Luke Skywalker",
-  home: "Tatooine",
-  species: "human",
-};
+import { ScrollView } from "react-native-gesture-handler";
+import {connect} from 'react-redux'
+import {sendPushNotification} from '../store/actions'
 
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
-function Home(props) {
+const Home = (props) => {
   const { navigation } = props;
-  const [how,setHow] = useState('')
-  const [who, setWho] = useState('')
-  const [where, setWhere] = useState('')
-
-  console.log(how)
+ 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.square}
-        onPress={() => navigation.navigate("Detail", { item: character, how , setHow })}
+        onPress={() => navigation.navigate("Detail")}
       >
         <View>
-          {/* <Text style={styles.buttonText}>What {character.name}?</Text> */}
+       
           <Text
             adjustsFontSizeToFit={true}
             minimumFontScale={0.1}
@@ -43,7 +33,7 @@ function Home(props) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.square}
-        onPress={() => navigation.navigate("Contact")}
+        onPress={() => navigation.navigate("Contact",{from:"contact"})}
       >
         <View>
           <Text
@@ -57,7 +47,7 @@ function Home(props) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.square}
-        // onPress={() => navigation.navigate("Detail", { item: character })}
+        onPress={() => navigation.navigate("Contact")}
       >
         <View>
           <Text
@@ -69,9 +59,30 @@ function Home(props) {
           </Text>
         </View>
       </TouchableOpacity>
+
+      <TouchableOpacity 
+      style={styles.square}
+      onPress={()=>{
+        // console.log(props.pushNotificationData, props.token);
+        props.sendPushNotification(props.pushNotificationData, props.token )}}
+      >
+        <Text  style={styles.buttonText}>Submit</Text>
+      </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 }
+
+const mapStateToProps = props =>{
+  // console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",props)
+  return{
+    pushNotificationData: props.pushNotification,
+    token: props.user.userDetails.token
+  }
+
+}
+
+export default connect(mapStateToProps, {sendPushNotification})(Home);
 
 const styles = StyleSheet.create({
   container: {
@@ -111,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+
