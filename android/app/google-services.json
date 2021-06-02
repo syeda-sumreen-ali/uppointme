@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "547023120607",
+    "project_id": "uppointme-1806d",
+    "storage_bucket": "uppointme-1806d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547023120607:android:a63238a4e5b5315065e16a",
+        "android_client_info": {
+          "package_name": "com.uppointme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "547023120607-s4dooen4lt4qr4tevpcqvkbs5qo3bn8j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADZolKxYdnoueDE_UxXlQ3GajhlD5_lL0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "547023120607-s4dooen4lt4qr4tevpcqvkbs5qo3bn8j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
