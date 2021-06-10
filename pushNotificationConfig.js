@@ -79,9 +79,9 @@ export const pushNotificationConfig = () => {
         PushNotification.localNotification({
             title: remoteMessage.notification.title,
             message: remoteMessage.notification.body,
-            channelId: "123456"
+            channelId: "123456",
             // bigPictureUrl: remoteMessage.notification.android.smallIcon,
-            // largeIconUrl: remoteMessage.notification.android.smallIcon,
+            // largeIconUrl: "ic_launcher",
         });
         // PushNotification.localNotification({
         //     title: remoteMessage.notification.title,
