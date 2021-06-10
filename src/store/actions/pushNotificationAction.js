@@ -18,10 +18,11 @@ export const setPushNotificationData = (data, type) => dispatch => {
 }
 
 export const sendPushNotification = (data, token) => async dispatch => {
-  if(!Object.keys(data.who).length || !Object.keys(data.where).length || !data.how.length  ){
+  if(!Object.keys(data.who).length || (data.how !== 'goto'&& !Object.keys(data.where).length )|| !data.how.length  ){
    dispatch(setToast('error', 'Select how , who and where first'))
   }else{
   // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', data)
+  let how = data.how.charAt(0).toUpperCase() + data.how.slice(1)
   fetch(`https://fcm.googleapis.com/fcm/send`, {
     method: 'POST',
     headers: {
@@ -31,7 +32,7 @@ export const sendPushNotification = (data, token) => async dispatch => {
     body: JSON.stringify({
       to: data.who.token,
       notification: {
-        body: `${data.who.name} ${data.how} ${data.where.name}`,
+        body: data.how ==='goto'? `${how} ${data.who.name}` : `${data.who.name} ${data.how} ${data.where.name}`,
         title: 'Uppoint.me notification',
         content_available: true,
         priority: 'high',
@@ -44,15 +45,16 @@ export const sendPushNotification = (data, token) => async dispatch => {
         priority: 'high',
         who: data.who.name,
         how: data.how,
-        where: data.where,
+        where:  data.how==='goto'? data.who: data.where,
         type: 'NotificationDetails',
       },
     }),
   })
     .then(res => console.log(res))
     .then(response => {
+      console.log("data.who.name",data.who.name)
       // console.log(response)
-      dispatch(setToast('success', `Your message has been sent to ${data.where.name}`))
+      dispatch(setToast('success', `Your message has been sent to ${ data.how ==='goto'? data.who.name:data.where.name}`))
     })
     .catch(err => console.log(err))
   //

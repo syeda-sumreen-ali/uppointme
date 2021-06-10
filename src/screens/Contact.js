@@ -242,7 +242,8 @@ const styles = StyleSheet.create({
     backgroundColor:'black',
     marginVertical:'5%',
     height:50,
-    width:170,
+    marginLeft:'1%',
+    width: windowWidth * 0.8,
     paddingLeft:15,
     // alignItems:'center',
     justifyContent:'center'

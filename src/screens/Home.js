@@ -7,6 +7,9 @@ import {sendPushNotification} from '../store/actions'
 const Home = props => {
   const {navigation} = props
 
+  React.useEffect(() => {
+   
+  }, [props.pushNotificationData])
   const ReactangleCard = (value, onPress) => (
     <TouchableOpacity
       style={styles.rectangle}
@@ -30,6 +33,7 @@ const Home = props => {
       </View>
     </TouchableOpacity>
   )
+  console.log(props.pushNotificationData.how)
   return (
     <ScrollView style={{flex:1}}>
       <View style={styles.container}>
@@ -43,9 +47,9 @@ const Home = props => {
       
 
 
-      {props.pushNotificationData.where.name
+      {props.pushNotificationData.how ==='goto' ? null:(props.pushNotificationData.where.name
           ? ReactangleCard(props.pushNotificationData.where.name,()=> navigation.navigate('Contact'))
-          : SquareCard('Where',()=> navigation.navigate('Contact'))}
+          : SquareCard('Where',()=> navigation.navigate('Contact')))}
       
 
 
@@ -62,6 +66,7 @@ const Home = props => {
 }
 
 const mapStateToProps = props => {
+  console.log(props.pushNotification)
   return {
     pushNotificationData: props.pushNotification,
     token: props.user.userDetails.token,

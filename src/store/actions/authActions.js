@@ -10,10 +10,11 @@ import { getUserDetails } from './userDetailsActions';
 
 export const register=(email, password)=>async(dispatch)=>{
    try {
+  
     auth()
     .createUserWithEmailAndPassword(email, password)
     .then((user) => {
-        // console.log(user)
+        console.log(user)
         if (!user.emailVerified) {
             auth().onAuthStateChanged(function(user) { 
               // console.log(user.user)
@@ -49,10 +50,11 @@ export const register=(email, password)=>async(dispatch)=>{
 
 
 export const login=(email, password)=>async(dispatch)=>{
-    // console.log('login') 
+    console.log('login') 
     try {
       //signin with  email and password
       let user = await auth().signInWithEmailAndPassword(email,password)
+  
       if(user){
 
         dispatch({type:types.LOGIN, payload:user})      
@@ -69,6 +71,7 @@ export const login=(email, password)=>async(dispatch)=>{
         // get notification token
         let token = await NotificationService.getToken()
 
+        console.log("token==================",token)
         //if no record exist then create a basic record with email and token
         if(!getRecord._data){
 
@@ -78,7 +81,7 @@ export const login=(email, password)=>async(dispatch)=>{
             id:userid,
             name:null,
             location:null,
-            token,
+            token:token,
             favourites:[],
             createdAt:firestore.FieldValue.serverTimestamp()
           }
@@ -99,7 +102,7 @@ export const login=(email, password)=>async(dispatch)=>{
         
       }  
     } catch (error) {
-      console.log(error)
+      console.log("ERORR:",error)
     }
       
  }
