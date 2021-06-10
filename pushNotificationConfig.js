@@ -8,9 +8,7 @@ export const pushNotificationConfig = () => {
     // Must be outside of any component LifeCycle (such as `componentDidMount`).
     PushNotification.configure({
         // (optional) Called when Token is generated (iOS and Android)
-        onRegister: function (token) {
-            console.log("TOKEN:", token);
-        },
+       
 
         // (required) Called when a remote is received or opened, or local notification is opened
         onNotification: function (notification) {
@@ -79,8 +77,8 @@ export const pushNotificationConfig = () => {
         PushNotification.localNotification({
             title: remoteMessage.notification.title,
             message: remoteMessage.notification.body,
-            channelId: "123456"
-            // bigPictureUrl: remoteMessage.notification.android.smallIcon,
+            channelId: "123456",
+            bigPictureUrl: "ic_stat_name",
             // largeIconUrl: remoteMessage.notification.android.smallIcon,
         });
         // PushNotification.localNotification({
