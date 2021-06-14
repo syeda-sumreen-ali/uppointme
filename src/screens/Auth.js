@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderWidth:2,
     width: '90%',
+    height:45,
     marginBottom: '4%',
     fontSize: 16,
     paddingLeft: '4%',

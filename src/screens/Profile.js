@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   ScrollView,
@@ -6,23 +6,26 @@ import {
   TextInput,
   View,
   TouchableHighlight,
+  SafeAreaView
 } from 'react-native'
-import {COLORS, ICONS} from '../constants'
-import {connect} from 'react-redux'
+import { COLORS, ICONS } from '../constants'
+import { connect } from 'react-redux'
 import {
   addUserDetails,
   getUserDetails,
   updateUserDetails,
 } from '../store/actions'
 import Map from '../component/Map'
-import {TouchableOpacity} from 'react-native-gesture-handler'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { StatusBar } from 'react-native'
+import { Platform } from 'react-native'
 
 const Profile = props => {
   const [userName, setUserName] = useState('')
   const [location, setLocation] = useState('')
 
   useEffect(async () => {
-  
+
     await props.getUserDetails(() => {
       let userInfo = props.user.userDetails
       console.log('USER INFO', props)
@@ -36,62 +39,65 @@ const Profile = props => {
 
   const handleSubmit = () => {
     // if(Object.keys(props.user.userDetails).length){
-    props.updateUserDetails({name: userName, location: location})
+    props.updateUserDetails({ name: userName, location: location })
+
     // }else{
     // props.addUserDetails({name:userName, location:location})
     // }
   }
   return (
     // <ScrollView>
-
-    <View style={styles.container}>
-      <View style={{flexDirection: 'row'}}>
-        {props.user.userDetails && (
+    <>
+      <StatusBar animated={true} barStyle="dark-content" hidden={false} backgroundColor={COLORS.yellow} translucent={false} />
+      <View style={[styles.container, Platform.OS==='ios'&&{marginTop:40}]}>
+        <View style={{ flexDirection: 'row', marginBottom:15 }}>
+          {props.user.userDetails && (
+            <View
+              style={{ flex: 0.35, justifyContent: 'center', paddingLeft: '5%' }}>
+              <TouchableOpacity onPress={() => props.navigation.replace('Home')}>
+                <ICONS.AntDesign name={'left'} size={28} color={COLORS.dark} />
+              </TouchableOpacity>
+            </View>
+          )}
           <View
-            style={{flex: 0.35, justifyContent: 'center', paddingLeft: '5%'}}>
-            <TouchableOpacity onPress={() => props.navigation.replace('Home')}>
-              <ICONS.AntDesign name={'left'} size={28} color={COLORS.dark} />
-            </TouchableOpacity>
+            style={[
+              { flex: 1 },
+              !props.user.userDetails && { alignItems: 'center' },
+            ]}>
+            <Text style={styles.h1}>
+              {props.user.userDetails.name ? 'Edit Profile' : 'Create Profile'}
+            </Text>
           </View>
-        )}
-        <View
-          style={[
-            {flex: 1},
-            !props.user.userDetails && {alignItems: 'center'},
-          ]}>
-          <Text style={styles.h1}>
-            {props.user.userDetails.name ? 'Edit Profile' : 'Create Profile'}
-          </Text>
         </View>
+        <Text style={styles.h2}>Username:</Text>
+        <TextInput
+          placeholderTextColor={'gray'}
+          style={styles.textInput}
+          placeholder={'Enter Username'}
+          value={userName}
+          onChangeText={val => setUserName(val)}
+        />
+        <Text style={styles.h2}>Select Location</Text>
+        <View
+          style={{
+            width: '94%',
+            height: 300,
+            //  backgroundColor:'red',
+            overflow: 'hidden',
+            marginHorizontal: '2%',
+          }}>
+          <Map location={location} setLocation={setLocation} />
+        </View>
+        <TouchableHighlight
+          onPress={userName && location ? handleSubmit : () => { }}
+          style={[
+            styles.button,
+            !(userName && location) && { backgroundColor: COLORS.disabled },
+          ]}>
+          <Text style={styles.buttonText}>{'Submit Details'}</Text>
+        </TouchableHighlight>
       </View>
-      <Text style={styles.h2}>Username:</Text>
-      <TextInput
-        placeholderTextColor={'gray'}
-        style={styles.textInput}
-        placeholder={'Enter Username'}
-        value={userName}
-        onChangeText={val => setUserName(val)}
-      />
-      <Text style={styles.h2}>Select Location</Text>
-      <View
-        style={{
-          width: '94%',
-          height: 300,
-          //  backgroundColor:'red',
-          overflow: 'hidden',
-          marginHorizontal: '2%',
-        }}>
-        <Map location={location} setLocation={setLocation} />
-      </View>
-      <TouchableHighlight
-        onPress={userName && location ? handleSubmit : () => {}}
-        style={[
-          styles.button,
-          !(userName && location) && {backgroundColor: COLORS.disabled},
-        ]}>
-        <Text style={styles.buttonText}>{'Submit Details'}</Text>
-      </TouchableHighlight>
-    </View>
+    </>
     // {/* </ScrollView> */}
   )
 }
@@ -110,7 +116,7 @@ export default connect(mapStateToProps, {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.white,
   },
@@ -143,12 +149,13 @@ const styles = StyleSheet.create({
     marginBottom: '4%',
     fontSize: 16,
     paddingLeft: '4%',
+    height: 45
     // elevation: 2,
   },
   button: {
     backgroundColor: COLORS.primary,
     // elevation: 10,
-    borderWidth:4,
+    borderWidth: 4,
     width: '90%',
     height: 50,
     alignItems: 'center',
@@ -159,7 +166,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: COLORS.dark,
     fontSize: 19,
-    textTransform:'uppercase',
-    fontWeight:'bold'
+    textTransform: 'uppercase',
+    fontWeight: 'bold'
   },
 })
