@@ -62,7 +62,7 @@ export const Toast = ({ status, message, clearToast }) => {
 		},
 		_icon: { marginRight: '2%', flex: 0.15, paddingTop: '2%', alignItems: 'center' },
 		message: {
-			...FONTS.h3_r, color: COLORS.white, lineHeight: 18, letterSpacing: 0.16
+			...FONTS.h3_m, color: COLORS.white, lineHeight: 18, letterSpacing: 0.16
 		},
 		_message: { flex: 0.8, paddingVertical: '4%' }
 	});

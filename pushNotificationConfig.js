@@ -2,11 +2,12 @@ import React from 'react';
 import PushNotification from "react-native-push-notification";
 import * as RootNavigation from './src/navigation/RootNavigation';
 import messaging from '@react-native-firebase/messaging';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 export const pushNotificationConfig = () => {
     let data =null
-    // Must be outside of any component LifeCycle (such as `componentDidMount`).
     PushNotification.configure({
+        // Must be outside of any component LifeCycle (such as `componentDidMount`).
         // (optional) Called when Token is generated (iOS and Android)
         onRegister: function (token) {
             console.log("TOKEN:", token);
@@ -22,9 +23,10 @@ export const pushNotificationConfig = () => {
             // navigate screens on click on notification
             RootNavigation.navigate('NotificationDetails',{data:data})
 
+            
 
             // (required) Called when a remote is received or opened, or local notification is opened
-            // notification.finish(PushNotificationIOS.FetchResult.NoData);
+            notification.finish(PushNotificationIOS.FetchResult.NoData);
         },
         // onRead: function(data){
         //     console.log("READ>>>>>>>>>>>>>>>>>>>>>>",data)
@@ -76,19 +78,20 @@ export const pushNotificationConfig = () => {
     messaging().onMessage(remoteMessage => {
         console.log('before set local notification ', remoteMessage)
         data =remoteMessage
-        PushNotification.localNotification({
+        Platform.OS === 'android' && PushNotification.localNotification({
             title: remoteMessage.notification.title,
             message: remoteMessage.notification.body,
-            channelId: "123456",
-            // bigPictureUrl: remoteMessage.notification.android.smallIcon,
-            // largeIconUrl: "ic_launcher",
+            //largeIconUrl: remoteMessage.notification.android.smallIcon,
+            //bigPictureUrl: remoteMessage.notification.android.smallIcon,
+            channelId: '123456'
         });
-        // PushNotification.localNotification({
-        //     title: remoteMessage.notification.title,
-        //     message: remoteMessage.notification.body,
-        //     bigPictureUrl: remoteMessage.notification.android.smallIcon,
-        //     largeIconUrl: remoteMessage.notification.android.smallIcon,
-        // });
+        Platform.OS === 'ios' && PushNotification.localNotification({
+            title: remoteMessage.notification.title,
+            message: remoteMessage.notification.body,
+            // channelId: "123456",
+            // bigPictureUrl: remoteMessage.notification.android.smallIcon,
+            // largeIconUrl: remoteMessage.notification.android.smallIcon,
+        });
     });
 
     // setBackgroundMessageHandler fire when notification recieved when app in background or kill

@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native'
+import {StyleSheet, View, Text,SafeAreaView, TouchableOpacity} from 'react-native'
 import {ScrollView} from 'react-native-gesture-handler'
 import {connect} from 'react-redux'
 import {sendPushNotification, clearPushNotificationData } from '../store/actions'
@@ -35,6 +35,9 @@ const Home = props => {
   )
   console.log(props.pushNotificationData.how)
   return (
+    // <SafeAreaView>
+
+  
     <ScrollView style={{flex:1}}>
       <View style={styles.container}>
         {props.pushNotificationData.how
@@ -71,6 +74,7 @@ const Home = props => {
 </View>
       </View>
     </ScrollView>
+    // </SafeAreaView>
   )
 }
 
