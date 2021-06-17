@@ -190,7 +190,7 @@ const [initialRoute, setInitialRoute] = useState('Splash')
                       <TouchableOpacity
                         style={styles.square}
                         onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.textStyle}>Back</Text>
+                        <Text style={styles.buttonText}>Back</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.square}
@@ -198,7 +198,7 @@ const [initialRoute, setInitialRoute] = useState('Splash')
                           setModalVisible(false);
                           props.logout()}}>
                         <View>
-                          <Text style={styles.textStyle}>Logout</Text>
+                          <Text style={styles.buttonText}>Logout</Text>
                         </View>
                       </TouchableOpacity>
                       {/* <Pressable
@@ -385,12 +385,12 @@ const [initialRoute, setInitialRoute] = useState('Splash')
                       <Pressable
                         style={styles.square}
                         onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.textStyle}>Back</Text>
+                        <Text style={styles.buttonText}>Back</Text>
                       </Pressable>
                       <Pressable
                         style={styles.square}
                         onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.textStyle}>Logout</Text>
+                        <Text style={styles.buttonText}>Logout</Text>
                       </Pressable>
                       {/* <Pressable
                         style={[styles.button, styles.buttonClose]}

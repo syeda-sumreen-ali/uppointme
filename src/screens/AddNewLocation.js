@@ -46,7 +46,7 @@ const AddNewLocation = props => {
      
 
      
-      <Text style={styles.h2}>Username:</Text>
+      <Text style={styles.h2}>New Favorite:</Text>
       <TextInput
         placeholderTextColor={'gray'}
         style={styles.textInput}
@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: COLORS.primary,
-    elevation: 10,
+    borderWidth:4,
+    // elevation: 10,
     width: '90%',
     height: 50,
     alignItems: 'center',

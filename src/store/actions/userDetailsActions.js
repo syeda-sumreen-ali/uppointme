@@ -30,30 +30,6 @@ export const  addUserDetails= (data)=>async(dispatch)=>{
     }    
 }
 
-
-export const getUserDetails =(callback)=>async(dispatch)=>{
-    
-    try {
-        const userid = await getAppStorage('auth')    
-        dispatch({type:types.GET_USER_DETAILS_START})
-        const user = await firestore().collection('Users').doc(userid).get();
-        if (user._data){
-            dispatch({type:types.GET_USER_DETAILS_SUCCESS, payload:user._data})
-            callback && callback('Home')
-            //    console.log("getUserDetails",user._data)
-        }else{
-            dispatch({type:types.GET_USER_DETAILS_FAILED})
-             callback && callback('Profile')
-        }
-        
-    } catch (error) {
-        dispatch({type:types.GET_USER_DETAILS_FAILED})
-
-        console.log(error)   
-    }
-}
-
-
 export const updateUserDetails =(data)=>async(dispatch)=>{
     try {
         const userid = await getAppStorage('auth')
@@ -87,7 +63,7 @@ export const getAllContacts=(callback)=>async(dispatch)=>{
                  userDetails.push(doc._data)});  
             dispatch({type:types.GET_ALL_CONTACTS_SUCCESS,payload:userDetails})
          }   
-         callback()
+         callback && callback()
     } catch (error) {
         dispatch({type:types.GET_ALL_CONTACTS_FAILED})
         dispatch(setToast('error',error))
@@ -110,14 +86,31 @@ export const handleFavourite=(favourites, type)=>async(dispatch)=>{
         }else{
             dispatch(setToast('success','Marked as favourite'))
         }
-        // getUserDetails()
+       
     } catch (error) {
         console.log(error)   
     }
 }
 
+export const getUserDetails =(callback)=>async(dispatch)=>{
+    
+    try {
+        const userid = await getAppStorage('auth')    
+        dispatch({type:types.GET_USER_DETAILS_START})
+        const user = await firestore().collection('Users').doc(userid).get();
+        if (user._data){
+            dispatch({type:types.GET_USER_DETAILS_SUCCESS, payload:user._data})
+            dispatch(getAllContacts())
+            callback && callback('Home')
+            //    console.log("getUserDetails",user._data)
+        }else{
+            dispatch({type:types.GET_USER_DETAILS_FAILED})
+             callback && callback('Profile')
+        }
+        
+    } catch (error) {
+        dispatch({type:types.GET_USER_DETAILS_FAILED})
 
-// export const getAllContacts=(user)=>async(dispatch)=>{
-
-
-// }
+        console.log(error)   
+    }
+}

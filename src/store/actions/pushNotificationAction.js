@@ -73,3 +73,7 @@ export const sendPushNotification = (data, token) => async dispatch => {
 
   }
 }
+
+export const clearPushNotificationData= ()=>async dispatch =>{
+    dispatch({type:types.CLEAR_PUSH_NOTIFICATION_DATA})
+}

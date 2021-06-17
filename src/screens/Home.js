@@ -2,7 +2,7 @@ import React from 'react'
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native'
 import {ScrollView} from 'react-native-gesture-handler'
 import {connect} from 'react-redux'
-import {sendPushNotification} from '../store/actions'
+import {sendPushNotification, clearPushNotificationData } from '../store/actions'
 
 const Home = props => {
   const {navigation} = props
@@ -41,18 +41,26 @@ const Home = props => {
           ? ReactangleCard(props.pushNotificationData.how,()=> navigation.navigate('Detail'))
           : SquareCard('How', ()=>navigation.navigate('Detail'))}
 
-            {props.pushNotificationData.who.name
+            {props.pushNotificationData.how ==='goto' ? null:( props.pushNotificationData.who.name
           ? ReactangleCard(props.pushNotificationData.who.name,()=> navigation.navigate('Contact',{from:'contact'}))
-          : SquareCard('Who',()=> navigation.navigate('Contact',{from:'contact'}))}
+          : SquareCard('Who',()=> navigation.navigate('Contact',{from:'contact'})))}
       
 
 
-      {props.pushNotificationData.how ==='goto' ? null:(props.pushNotificationData.where.name
+      {props.pushNotificationData.where.name
           ? ReactangleCard(props.pushNotificationData.where.name,()=> navigation.navigate('Contact'))
-          : SquareCard('Where',()=> navigation.navigate('Contact')))}
+          : SquareCard('Where',()=> navigation.navigate('Contact'))}
       
 
+<View style={styles.btnSection}>
 
+      <TouchableOpacity
+          style={styles.submitBtn}
+          onPress={() => {
+            props.clearPushNotificationData()
+          }}>
+          <Text style={styles.SubmitBtntext}>Reset</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.submitBtn}
           onPress={() => {
@@ -60,6 +68,7 @@ const Home = props => {
           }}>
           <Text style={styles.SubmitBtntext}>Submit</Text>
         </TouchableOpacity>
+</View>
       </View>
     </ScrollView>
   )
@@ -73,7 +82,7 @@ const mapStateToProps = props => {
   }
 }
 
-export default connect(mapStateToProps, {sendPushNotification})(Home)
+export default connect(mapStateToProps, {sendPushNotification,clearPushNotificationData})(Home)
 
 const styles = StyleSheet.create({
   container: {
@@ -103,8 +112,8 @@ const styles = StyleSheet.create({
     transform: [{rotate: '-45deg'}],
   },
   square: {
-    width: 130,
-    height: 130,
+    width: 120,
+    height: 120,
     backgroundColor: '#FFD600',
     padding: 2,
     margin: 30,
@@ -135,15 +144,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFD600',
     borderWidth: 4,
     borderColor: 'black',
-    width: '60%',
+    width: '40%',
     height: 60,
+
     alignItems: 'center',
     justifyContent: 'center',
   },
   SubmitBtntext:{
     fontSize:32,
     fontWeight:'bold',
+  
     textTransform:'uppercase'
+  },
+  btnSection:{
+    flexDirection:'row',
+    width:'100%',
+    justifyContent:'space-evenly'
   }
+
 
 })

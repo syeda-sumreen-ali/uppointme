@@ -12,6 +12,7 @@ import {connect} from 'react-redux'
 import {
   addUserDetails,
   getUserDetails,
+  setToast,
   updateUserDetails,
 } from '../store/actions'
 import Map from '../component/Map'
@@ -35,8 +36,20 @@ const Profile = props => {
   }, [Object.keys(props.user.userDetails).length])
 
   const handleSubmit = () => {
+    const {setToast, user}= props
+    const {userDetails, contactList,} = user;
+
     // if(Object.keys(props.user.userDetails).length){
-    props.updateUserDetails({name: userName, location: location})
+    console.log("props.user.userDetails", props.user.userDetails)
+    console.log("props.contact list ", props.user.contactList)
+
+    let isUserExist =contactList.find(data=> data.name=== userName)
+    if(isUserExist){
+      setToast('error','User with this name already exist')
+    }else{
+      // setToast('success','user updated')
+      props.updateUserDetails({name: userName, location: location})
+    }
     // }else{
     // props.addUserDetails({name:userName, location:location})
     // }
@@ -97,14 +110,17 @@ const Profile = props => {
 }
 
 const mapStateToProps = props => {
+  console.log("props.user",props.user)
   return {
     user: props.user,
+    
   }
 }
 export default connect(mapStateToProps, {
   addUserDetails,
   getUserDetails,
   updateUserDetails,
+  setToast
 })(Profile)
 
 const styles = StyleSheet.create({
@@ -142,6 +158,7 @@ const styles = StyleSheet.create({
     width: '90%',
     marginBottom: '4%',
     fontSize: 16,
+    
     paddingLeft: '4%',
     // elevation: 2,
   },
@@ -154,6 +171,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: '6%',
+    textTransform:'uppercase',
     marginBottom: '6%',
   },
   buttonText: {
