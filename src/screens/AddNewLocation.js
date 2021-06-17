@@ -40,13 +40,13 @@ const AddNewLocation = props => {
           </View>
 
         <View style={{flex: 1}}>
-          <Text style={styles.h1}> Add New Favorite </Text>
+          <Text style={styles.h1}> Add New Favourite </Text>
         </View>
       </View>
      
 
      
-      <Text style={styles.h2}>New Favorite:</Text>
+      <Text style={styles.h2}>New Favourite:</Text>
       <TextInput
         placeholderTextColor={'gray'}
         style={styles.textInput}
@@ -84,7 +84,7 @@ export default connect(null,{handleFavourite})(AddNewLocation)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     width:'100%',
     // flexDirection:'row',
@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: COLORS.dark,
     fontSize: 19,
+    textTransform:"uppercase"
     // fontWeight:'bold'
   },
 })

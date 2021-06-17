@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     transform: [{rotate: '45deg'}],
     borderColor: 'black',
     borderWidth: 4,
+    
     marginTop:50
   },
   rectangle: {
@@ -141,7 +142,8 @@ const styles = StyleSheet.create({
   rectangleText:{
     fontSize:32,
     fontWeight:'bold',
-    textTransform:'uppercase'
+    textTransform:'uppercase',
+    textAlign:'center'
   },
   submitBtn:{
     marginVertical:50,

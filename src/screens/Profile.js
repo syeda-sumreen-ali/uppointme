@@ -99,7 +99,7 @@ const Profile = props => {
             styles.button,
             !(userName && location) && { backgroundColor: COLORS.disabled },
           ]}>
-          <Text style={styles.buttonText}>{'Submit Details'}</Text>
+          <Text style={styles.buttonText}>Save</Text>
         </TouchableHighlight>
       </View>
     </>

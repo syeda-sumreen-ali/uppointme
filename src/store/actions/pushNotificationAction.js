@@ -18,7 +18,7 @@ export const setPushNotificationData = (data, type) => dispatch => {
 }
 
 export const sendPushNotification = (data, token) => async dispatch => {
-  if(!Object.keys(data.who).length || (data.how !== 'goto'&& !Object.keys(data.where).length )|| !data.how.length  ){
+  if((data.how !== 'goto'&& !Object.keys(data.who).length) ||  !Object.keys(data.where).length || !data.how.length  ){
    dispatch(setToast('error', 'Select how , who and where first'))
   }else{
   // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', data)
@@ -32,20 +32,20 @@ export const sendPushNotification = (data, token) => async dispatch => {
     body: JSON.stringify({
       to: data.who.token,
       notification: {
-        body: data.how ==='goto'? `${how} ${data.who.name}` : `${data.who.name} ${data.how} ${data.where.name}`,
+        body: data.how ==='goto'? `${how} ${data.where.name}` : `${data.who.name} ${data.how} ${data.where.name}`,
         title: 'Uppoint.me notification',
         content_available: true,
         priority: 'high',
       },
       data: {
         sender: store.getState().user.userDetails.name,
-        body: `${data.who.name} ${data.how} ${data.where.name}`,
+        body: data.how ==='goto'? `${how} ${data.where.name}` : `${data.who.name} ${data.how} ${data.where.name}`,
         title: 'Uppoint.me notification',
         content_available: true,
         priority: 'high',
         who: data.who.name,
         how: data.how,
-        where:  data.how==='goto'? data.who: data.where,
+        where: data.where,
         type: 'NotificationDetails',
       },
     }),
@@ -54,7 +54,7 @@ export const sendPushNotification = (data, token) => async dispatch => {
     .then(response => {
       console.log("data.who.name",data.who.name)
       // console.log(response)
-      dispatch(setToast('success', `Your message has been sent to ${ data.how ==='goto'? data.who.name:data.where.name}`))
+      dispatch(setToast('success',data.how==='goto'?`${data.how} ${data.where.name}` :  `Your message has been sent to ${data.who.name}`))
     })
     .catch(err => console.log(err))
   //
