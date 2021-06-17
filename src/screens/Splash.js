@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react'
 import { StyleSheet,Image, Text, View } from 'react-native'
 import {COLORS, FONTS} from '../constants'
-import splashImg from '../assets/logo.jpg'
+import splashImg from '../assets/logo.png'
 import {connect} from 'react-redux'
 import {getUserDetails, logout} from '../store/actions'
 import {getAppStorage} from '../utils/localstorage'
@@ -65,19 +65,23 @@ const styles = StyleSheet.create({
     },
    
     img:{
-        width:160,
-        height:160,
+        width:250,
+        height:250,
+        transform: [{rotate: '135deg'}],
     },
     imgContainer:{
         transform: [{rotate: '45deg'}],
-        marginLeft:-25
+        // marginLeft:-25
         // overflow:'hidden'
     },
     logoText:{
         textTransform:'uppercase',
         fontWeight:'bold',
-        fontSize:29,
-        textAlign:'justify',
+        fontSize:25,
+        alignSelf:'center',
+        textAlign:'center',
+        marginTop:-30,
+        // textAlign:'justify',
         letterSpacing:1
     },
     caption:{

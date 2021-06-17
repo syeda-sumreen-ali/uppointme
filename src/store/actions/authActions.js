@@ -8,7 +8,7 @@ import {setAppStorage, getAppStorage, removeAppStorageByKey} from '../../utils/l
 import {NotificationService} from '../../utils/notificationService';
 import { getUserDetails } from './userDetailsActions';
 
-export const register=(email, password)=>async(dispatch)=>{
+export const register=(email, password,callback)=>async(dispatch)=>{
    try {
   
     auth()
@@ -21,6 +21,7 @@ export const register=(email, password)=>async(dispatch)=>{
                 if (!user.emailVerified) {
                     user.sendEmailVerification();
                     dispatch(setToast('info','A verification link has sent to your account, Please verify to continue'))
+                    callback()
                 }
                 else {                  
                   //  console.log('Not verified');
@@ -49,7 +50,7 @@ export const register=(email, password)=>async(dispatch)=>{
 }
 
 
-export const login=(email, password)=>async(dispatch)=>{
+export const login=(email, password, callback)=>async(dispatch)=>{
     console.log('login') 
     try {
       //signin with  email and password
@@ -99,10 +100,13 @@ export const login=(email, password)=>async(dispatch)=>{
         dispatch(getUserDetails(()=>store.getState().user.userDetails.name?
         navigationRef.current.navigate('Home'):
         navigationRef.current.navigate('Profile')))
+        callback()
         
       }  
     } catch (error) {
-      console.log("ERORR:",error)
+      console.log("ERORR:",error.code);
+      dispatch(setToast('error',error.message.replace(`[${error.code}]`,'')))
+
     }
       
  }

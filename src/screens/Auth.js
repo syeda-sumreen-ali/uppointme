@@ -51,8 +51,12 @@ const Auth = (props) => {
      return props.setToast('error','Password must be 6 characters long')
     }
 
-    pageType==='signup'?props.register(email,password):props.login(email,password)
+    pageType==='signup'?props.register(email,password,clearState):props.login(email,password,clearState)
   };
+  const clearState=()=>{
+    setEmail('')
+    setPassword('')
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.h1}>{pageType==='signup'?'Create Account':'Sign In'}</Text>
@@ -84,10 +88,16 @@ const Auth = (props) => {
       </TouchableHighlight>
 
        {pageType==='signup'? 
-       <TouchableWithoutFeedback onPress={()=>setPageType('signin')}> 
+       <TouchableWithoutFeedback onPress={()=>{
+         clearState();
+         setPageType('signin');
+         }}> 
           <Text style={styles.bottomText}>Already have an acount ? <Text style={{fontWeight:'bold'}}>Sign in</Text></Text>
         </TouchableWithoutFeedback>
-       : <TouchableWithoutFeedback onPress={()=>setPageType('signup')}> 
+       : <TouchableWithoutFeedback onPress={()=>{
+        clearState(),      setPageType('signup');
+         
+         }}> 
           <Text style={styles.bottomText}>{'Don\'t have an acount? '} <Text style={{fontWeight:'bold'}}>Create now</Text></Text>
         </TouchableWithoutFeedback>}
     </View>
