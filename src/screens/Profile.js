@@ -128,10 +128,11 @@ const styles = StyleSheet.create({
   },
   h1: {
     color: COLORS.dark,
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: '4%',
+    marginBottom: '6%',
     marginTop: '5%',
+    marginLeft:'5%'
   },
   h2: {
     color: COLORS.dark,

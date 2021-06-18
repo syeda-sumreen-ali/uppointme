@@ -3,6 +3,7 @@ const initialState={
     userDetails:{},
     contactList:[],
     favourites:[],
+    locations:[],
     isContactLoading:false,
     isUserLoading:false
 }
@@ -28,6 +29,8 @@ const userReducer=(state=initialState, {type,payload})=>{
             return {...state, isContactLoading:false}
         case types.HANDLE_FAVOURITE:
             return{...state, userDetails:{...state.userDetails,favourites:payload}}
+            case types.HANDLE_LOCATION:
+                return{...state, userDetails:{...state.userDetails,locations:payload}} 
         case types.LOGOUT:
             return{...state,userDetails:{}}
         default:

@@ -73,9 +73,9 @@ export const getAllContacts=(callback)=>async(dispatch)=>{
 }
 
 
-export const handleFavourite=(favourites, type)=>async(dispatch)=>{
+export const updateFavourite=(favourites, type)=>async(dispatch)=>{
     try {
-        console.log(favourites)
+        console.log("favourites=======================",favourites)
         const userid= await getAppStorage('auth')
         getUserDetails()
         firestore().collection('Users').doc(userid).update({
@@ -115,3 +115,26 @@ export const getUserDetails =(callback)=>async(dispatch)=>{
         console.log(error)   
     }
 }
+
+
+export const addFavouriteLocation = (locations,type)=> async (dispatch)=>{
+    try {
+      
+        const userid= await getAppStorage('auth')
+        getUserDetails()
+        firestore().collection('Users').doc(userid).update({
+            locations
+        })
+        dispatch({type:types.HANDLE_LOCATION, payload:locations})
+    
+        if(type==='remove'){
+            dispatch(setToast('success','Removed from favourite locations'))
+        }else{
+            dispatch(setToast('success','Marked as favourite location'))
+        }
+       
+    } catch (error) {
+        console.log(error)   
+    }
+}
+

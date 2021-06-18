@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import {COLORS, ICONS} from '../constants'
 import {connect} from 'react-redux'
-import {handleFavourite} from '../store/actions'
+import {addFavouriteLocation, setToast} from '../store/actions'
 import Map from '../component/Map'
 import {TouchableOpacity} from 'react-native-gesture-handler'
 import { navigationRef } from '../navigation/RootNavigation'
@@ -20,10 +20,21 @@ const AddNewLocation = props => {
 
   const handleSubmit = () => {
       let obj={name: userName, location: location}
-      let arr = props.favorite.slice(0)
-      arr.push(obj)
-        console.log(arr)
-        props.handleFavourite(arr, 'add')
+      let arr = props.locations||[]
+      if(props.locations.length ){
+          if(props.locations.find(item=> item.name===userName || item.locations===userName)){
+            props.setToast('error', 'This favourite name or location already exist in your favourite locations')
+          }else{
+            arr.push(obj)
+            // console.log(arr)
+            props.addFavouriteLocation(arr, 'add') 
+          }
+      }else{
+        arr.push(obj)
+        // console.log(arr)
+        props.addFavouriteLocation(arr, 'add')
+
+      }
     // props.onChangeFavourite(obj)
   }
   console.log(props,"================================")
@@ -40,13 +51,13 @@ const AddNewLocation = props => {
           </View>
 
         <View style={{flex: 1}}>
-          <Text style={styles.h1}> Add New Favourite </Text>
+          <Text style={styles.h1}> Add Favourite Location </Text>
         </View>
       </View>
      
 
      
-      <Text style={styles.h2}>New Favourite:</Text>
+      <Text style={styles.h2}>Location Name:</Text>
       <TextInput
         placeholderTextColor={'gray'}
         style={styles.textInput}
@@ -66,6 +77,7 @@ const AddNewLocation = props => {
         <Map location={location} setLocation={setLocation} />
       </View>
       <TouchableHighlight
+      // onPress={()=>handleSubmit()}
         onPress={userName && location ? handleSubmit : () => {}}
         style={[
           styles.button,
@@ -78,8 +90,15 @@ const AddNewLocation = props => {
   )
 }
 
+const mapStateToProps = props => {
+  const {locations,favourites} = props.user.userDetails
+  return {
+    locations: locations,
+    favourites:favourites
+  }
+}
 
-export default connect(null,{handleFavourite})(AddNewLocation)
+export default connect(mapStateToProps,{addFavouriteLocation, setToast})(AddNewLocation)
 
 const styles = StyleSheet.create({
   container: {
@@ -92,22 +111,18 @@ const styles = StyleSheet.create({
   },
   h1: {
     color: COLORS.dark,
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: '4%',
+    marginBottom: '6%',
     marginTop: '5%',
-    // elevation:10,
   },
   h2: {
     color: COLORS.dark,
     fontSize: 22,
     alignSelf: 'flex-start',
-    // textAlign:'left',
     fontWeight: '600',
     marginBottom: '4%',
     paddingLeft: '5%',
-    // marginTop: -60,
-    // elevation:10,
   },
   textInput: {
     backgroundColor: COLORS.white,

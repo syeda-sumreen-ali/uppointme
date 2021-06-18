@@ -13,25 +13,42 @@ import {connect} from 'react-redux'
 import {
   getUserDetails,
   getAllContacts,
-  handleFavourite,
+  updateFavourite,
+  // getFavourites,
   setPushNotificationData,
 } from '../store/actions'
 import {COLORS, ICONS} from '../constants'
 import AddNewLocation from './AddNewLocation'
+import { TouchableHighlight } from 'react-native'
 
 const windowWidth = Dimensions.get('window').width
 
 const Contact = props => {
   const [List, setList] = React.useState([])
   const [showModal, setShowModal] = useState(false)
-
+const [activeTab, setactiveTab] = useState('contact')
   const {
     getAllContacts,
-    handleFavourite,
+    updateFavourite,
     contactList,
     userDetails,
     isContactLoading,
   } = props
+
+  const getFavourites =()=>{
+    const {contactList, userDetails} = props;
+    let favUserArr = []
+    userDetails.favourites.map((item,index)=>{
+     for (let index2= 0; index2 < contactList.length; index2++) {
+          if(contactList[index2].id===item){
+            favUserArr.push(contactList[index2])
+          }    
+     }
+    })
+    console.log("favUserArr==============",favUserArr)
+   
+    setList(favUserArr)
+  }
 
   React.useEffect(async () => {
     if (props.route.params === undefined) {
@@ -46,7 +63,7 @@ const Contact = props => {
       let arr = props.contactList
       arr.map(item => {
         myfavourites.map(item2 => {
-          if (item.id === item2.id || item.name === item2.name) {
+          if (item.id === item2 ) {
             item.liked = true
           }
         })
@@ -54,6 +71,15 @@ const Contact = props => {
       console.log(arr)
       setList(arr)
     }
+    else {
+      await getAllContacts(()=>getFavourites())
+    }
+    if(activeTab ==='location'){
+      
+      setList(props.userDetails.locations)
+    }
+
+  
 
     const backAction = () => {
       props.navigation.navigate('Home')
@@ -66,38 +92,37 @@ const Contact = props => {
     )
 
     return () => backHandler.remove()
-  }, [props.contactList.length])
+  }, [props.contactList.length, activeTab])
 
-  const onChangeFavourite = (item, index) => {
+  const onChangeFavourite = (item,index) => {
     //if item is in favourites remove it from list else add it
 
     let arr = List.slice(0)
-    let favorite = props.userDetails.favourites || []
+    let favourites = props.userDetails.favourites || []
     let type = ''
-    if(index){
-      
-      arr[index].liked = !arr[index].liked
   
-      if (arr[index].liked) {
-        favorite.push(item)
-        type = 'add'
-      } else {
-        favorite = favorite.filter(item2 => item2.id !== item.id)
-        type = 'remove'
-      }
-    }
-    else{
-      favorite.push(item)
-      type='add'
-      console.log("item===========================",item,index)
-    }
+        if(favourites.length){
+          if(favourites.find((fav_item,fav_index)=>fav_item===item.id)){
+                favourites = favourites.filter(item2=> item2 !== item.id)
+                arr[index].liked = !arr[index].liked
+          }
+         
+          else{
+                console.log("user not exist that's why added")
+                favourites.push(item.id) 
+                arr[index].liked = !arr[index].liked
+              }
+          
+        }else{
+          console.log("empty favourties  that's why added")
+          arr[index].liked = !arr[index].liked
+          favourites.push(item.id) 
+        }
 
-    let modified_arr = []
-    favorite.map(item => {
-      modified_arr.push({name: item.name, location: item.location})
-    })
-    handleFavourite(modified_arr, type)
-    setList(arr)
+      console.log(favourites)
+  
+    updateFavourite(favourites, type)
+    setList([...arr, props.userDetails.locations])
   }
 
   const ItemView = ({item, index}) => {
@@ -105,7 +130,6 @@ const Contact = props => {
       <View style={{marginTop: '5%'}}>
         <TouchableOpacity
           activeOpacity={0.7}
-          // underlayColor={COLORS.light}/
           style={styles.square}
           onPress={() => {
             props.setPushNotificationData(
@@ -160,19 +184,26 @@ const Contact = props => {
     <View style={styles.container}>
 
       {isContactLoading ? (
-        <ActivityIndicator size={40} color={COLORS.primary} />
+        <ActivityIndicator size={100} color={COLORS.primary} />
       ) : 
       showModal?
       <AddNewLocation 
-      navigation={(page)=> props.navigation.navigate(page)}
-      favorite={props.userDetails.favourites}
-      onChangeFavourite={()=>onChangeFavourite()}
-       closeModal={()=>setShowModal(false)}/>
+        navigation={(page)=> props.navigation.navigate(page)}
+        closeModal={()=>setShowModal(false)}/>
       :
       
       (
         <View>
-       { props.route.params === undefined&& addNewLocationButton()}
+       <View style={styles.tabcontainer} >
+       <TouchableHighlight onPress={()=>setactiveTab('contact')}>
+          <Text style={activeTab==='contact'?styles.activeLink:styles.inActiveLink}>Contacts</Text>
+       </TouchableHighlight>
+       <TouchableHighlight onPress={()=>setactiveTab('location')}>
+          <Text style={activeTab==='location'?styles.activeLink:styles.inActiveLink}>Locations</Text>
+       </TouchableHighlight>
+         </View>
+     
+       { props.route.params === undefined && activeTab==='location' && addNewLocationButton()}
         <FlatList
           data={List}
           keyExtractor={(item, index) => index.toString()}
@@ -196,7 +227,8 @@ const mapStateToProps = props => {
 export default connect(mapStateToProps, {
   getAllContacts,
   getUserDetails,
-  handleFavourite,
+  updateFavourite,
+  // getFavourites,
   setPushNotificationData,
 })(Contact)
 
@@ -251,5 +283,30 @@ const styles = StyleSheet.create({
   addBtnText:{
       color:'white',
       fontSize:18
+  },
+  inActiveLink: {
+    color: COLORS.white,
+    fontSize: 20,
+    alignSelf: 'flex-start',
+    fontWeight: 'bold',
+    marginBottom: '4%',
+    
+    padding: '5%',
+  },
+  activeLink:{
+    color: COLORS.primary,
+    fontSize: 20,
+    alignSelf: 'flex-start',
+    fontWeight: 'bold',
+    marginBottom: '4%',
+    padding: '5%',
+  },
+  tabcontainer:{
+    flexDirection:"row",
+    backgroundColor:'black',
+    // alignItems:'center',
+    justifyContent:'center'
+
+
   }
 })

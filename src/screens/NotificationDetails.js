@@ -14,7 +14,7 @@ const NotificationDetails = (props) => {
     console.log("where===========",where)
     return (
         <View style={styles.container}>
-            <Text style={styles.titile}>Notification Details</Text>
+            <Text style={styles.title}>Notification Details</Text>
             <Text style={styles.h1}>Sender: <Text style={styles.val}>{data.sender}</Text></Text>
             <Text style={styles.h1}>Task: <Text style={styles.val}>{data.how}</Text></Text>
             <Text style={[styles.h1,styles.buttonText.mb20]}>Where:<Text style={styles.val}>{where.name}</Text></Text>
@@ -32,7 +32,7 @@ const NotificationDetails = (props) => {
 export default NotificationDetails
 
 const styles = StyleSheet.create({
-    titile:{
+    title:{
         ...FONTS.title_b,
         color:'black',
         fontWeight:'bold',
