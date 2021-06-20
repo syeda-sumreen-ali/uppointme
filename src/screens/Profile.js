@@ -29,25 +29,27 @@ const Profile = props => {
 
     await props.getUserDetails(() => {
       let userInfo = props.user.userDetails
-      console.log('USER INFO', props)
       if (Object.keys(userInfo).length) {
         setUserName(userInfo.name)
         setLocation(userInfo.location)
       }
-      console.log(props.user)
     })
   }, [Object.keys(props.user.userDetails).length])
 
   const handleSubmit = () => {
     const {setToast, user}= props
-    const {userDetails, contactList,} = user;
+    const {userDetails, contactList} = user;
 
+  if( contactList.length){
     let isUserExist =contactList.find(data=> data.name=== userName)
     if(isUserExist){
       setToast('error','User with this name already exist')
     }else{
       props.updateUserDetails({name: userName, location: location})
     }
+  }else{
+    props.updateUserDetails({name: userName, location: location}) 
+  }
    
   }
   return (
@@ -107,7 +109,6 @@ const Profile = props => {
 }
 
 const mapStateToProps = props => {
-  console.log("props.user",props.user)
   return {
     user: props.user,
     

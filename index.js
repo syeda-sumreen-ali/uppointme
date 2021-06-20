@@ -8,5 +8,5 @@ import {name as appName} from './app.json';
 import 'react-native-gesture-handler';
 import {pushNotificationConfig} from './pushNotificationConfig';
 
-// pushNotificationConfig()
+pushNotificationConfig()
 AppRegistry.registerComponent(appName, () => App);

@@ -82,7 +82,7 @@ export class Map extends Component {
 		if (Platform.OS === "android") {
 			LocationServicesDialogBox.checkLocationServicesIsEnabled({
 				message:
-					'<h2>Use Location? </h2> Kitchen Konnection wants to access your location',
+					'<h2>Use Location? </h2> Uppointme wants to access your location',
 				ok: 'YES',
 				cancel: 'NO',
 				enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => GPS OR NETWORK PROVIDER

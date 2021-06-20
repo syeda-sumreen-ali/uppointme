@@ -44,13 +44,12 @@ const [activeTab, setactiveTab] = useState('contact')
             favUserArr.push(contactList[index2])
           }    
      }
-    })
-    console.log("favUserArr==============",favUserArr)
-   
+    })   
     setList(favUserArr)
   }
 
   React.useEffect(async () => {
+  
     if (props.route.params === undefined) {
       setList(userDetails.favourites)
     }
@@ -58,9 +57,9 @@ const [activeTab, setactiveTab] = useState('contact')
       props.route.params !== undefined &&
       props.route.params.from === 'contact'
     ) {
-      await getAllContacts(() => setList(contactList))
+      await props.getAllContacts(() => setList(contactList))
       let myfavourites = props.userDetails.favourites
-      let arr = props.contactList
+      let arr = props.contactList.slice(0)
       arr.map(item => {
         myfavourites.map(item2 => {
           if (item.id === item2 ) {
@@ -68,11 +67,10 @@ const [activeTab, setactiveTab] = useState('contact')
           }
         })
       })
-      console.log(arr)
       setList(arr)
     }
     else {
-      await getAllContacts(()=>getFavourites())
+      await props.getAllContacts(()=>getFavourites())
     }
     if(activeTab ==='location'){
       
@@ -92,37 +90,35 @@ const [activeTab, setactiveTab] = useState('contact')
     )
 
     return () => backHandler.remove()
-  }, [props.contactList.length, activeTab])
+  }, [props.contactList.length,  props.route.params !== undefined &&
+    props.route.params.from === 'contact'&& List.length, activeTab])
 
   const onChangeFavourite = (item,index) => {
     //if item is in favourites remove it from list else add it
-
-    let arr = List.slice(0)
-    let favourites = props.userDetails.favourites || []
-    let type = ''
+try {
   
-        if(favourites.length){
-          if(favourites.find((fav_item,fav_index)=>fav_item===item.id)){
-                favourites = favourites.filter(item2=> item2 !== item.id)
-                arr[index].liked = !arr[index].liked
-          }
-         
-          else{
-                console.log("user not exist that's why added")
-                favourites.push(item.id) 
-                arr[index].liked = !arr[index].liked
-              }
-          
-        }else{
-          console.log("empty favourties  that's why added")
-          arr[index].liked = !arr[index].liked
-          favourites.push(item.id) 
-        }
+  let arr = List.slice(0)
+  let favourites = props.userDetails.favourites || []
+  let type = ''
 
-      console.log(favourites)
-  
-    updateFavourite(favourites, type)
-    setList([...arr, props.userDetails.locations])
+      if(favourites.length){
+        if(favourites.find((fav_item,fav_index)=>fav_item===item.id)){
+              favourites = favourites.filter(item2=> item2 !== item.id)
+              arr[index].liked = !arr[index].liked
+        }       
+        else{
+              favourites.push(item.id) 
+              arr[index].liked = !arr[index].liked
+            }
+      }else{
+        arr[index].liked = !arr[index].liked
+        favourites.push(item.id) 
+      }
+  updateFavourite(favourites,arr[index].liked? 'add':'remove')
+} catch (error) {
+  console.log(error)
+}
+   
   }
 
   const ItemView = ({item, index}) => {
@@ -158,7 +154,7 @@ const [activeTab, setactiveTab] = useState('contact')
                 <TouchableOpacity
                   onPress={() => onChangeFavourite(item, index)}>
                   <ICONS.MaterialIcons
-                    name={item.liked ? 'favorite' : 'favorite-outline'}
+                    name={item.liked===true ? 'favorite' : 'favorite-outline'}
                     size={30}
                     color={COLORS.dark}
                   />
@@ -194,7 +190,7 @@ const [activeTab, setactiveTab] = useState('contact')
       
       (
         <View>
-       <View style={styles.tabcontainer} >
+      {props.route.params ===undefined && <View style={styles.tabcontainer} >
        <TouchableHighlight onPress={()=>setactiveTab('contact')}>
           <Text style={activeTab==='contact'?styles.activeLink:styles.inActiveLink}>Contacts</Text>
        </TouchableHighlight>
@@ -202,7 +198,7 @@ const [activeTab, setactiveTab] = useState('contact')
           <Text style={activeTab==='location'?styles.activeLink:styles.inActiveLink}>Locations</Text>
        </TouchableHighlight>
          </View>
-     
+     }
        { props.route.params === undefined && activeTab==='location' && addNewLocationButton()}
         <FlatList
           data={List}
@@ -228,7 +224,6 @@ export default connect(mapStateToProps, {
   getAllContacts,
   getUserDetails,
   updateFavourite,
-  // getFavourites,
   setPushNotificationData,
 })(Contact)
 
@@ -265,7 +260,6 @@ const styles = StyleSheet.create({
     margin: 5,
 
     justifyContent: 'center',
-    //transform: [{ rotate: "45deg" }],
     borderColor: 'black',
     borderWidth: 4,
   },
@@ -277,7 +271,6 @@ const styles = StyleSheet.create({
     marginLeft:'1%',
     width: windowWidth * 0.8,
     paddingLeft:15,
-    // alignItems:'center',
     justifyContent:'center'
   },
   addBtnText:{
@@ -304,9 +297,6 @@ const styles = StyleSheet.create({
   tabcontainer:{
     flexDirection:"row",
     backgroundColor:'black',
-    // alignItems:'center',
     justifyContent:'center'
-
-
   }
 })

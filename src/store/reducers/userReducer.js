@@ -15,9 +15,7 @@ const userReducer=(state=initialState, {type,payload})=>{
         case types.GET_USER_DETAILS_START:
             return{...state,isUserLoading:true}    
         case types.GET_USER_DETAILS_SUCCESS:
-            // console.log('eeeeee', payload)
             let data= payload
-            // console.log(data)
             return{...state, isUserLoading:false, userDetails : data}
         case types.GET_USER_DETAILS_FAILED:
             return{...state, isUserLoading:false}    

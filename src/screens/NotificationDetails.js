@@ -8,18 +8,17 @@ import { navigationRef } from '../navigation/RootNavigation'
 
 const NotificationDetails = (props) => {
     let data = props.route.params.data.data
- 
     let where = JSON.parse(data.where)
-
-    console.log("where===========",where)
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Notification Details</Text>
             <Text style={styles.h1}>Sender: <Text style={styles.val}>{data.sender}</Text></Text>
             <Text style={styles.h1}>Task: <Text style={styles.val}>{data.how}</Text></Text>
             <Text style={[styles.h1,styles.buttonText.mb20]}>Where:<Text style={styles.val}>{where.name}</Text></Text>
-            <View style={{paddingTop:40}}>
-            <Map location={where.location}/>
+            <View style={{paddingVertical:40}}>
+            <Map 
+            setLocation={(val)=>console.log(val)}
+            location={where.location}/>
 
             </View>
             <TouchableOpacity style={styles.button} onPress={()=>navigationRef.current.navigate('Home')}>

@@ -6,13 +6,12 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {connect} from 'react-redux'
 import {COLORS} from '../constants';
 import {NotificationService} from '../utils/notificationService';
 import {setToast, register,login, getUserDetails} from '../store/actions'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-
+import Loader from '../component/Loader'
 
 const Auth = (props) => {
 
@@ -59,6 +58,7 @@ const Auth = (props) => {
   }
   return (
     <View style={styles.container}>
+      {props.loader && <Loader/> }
       <Text style={styles.h1}>{pageType==='signup'?'Create Account':'Sign In'}</Text>
       <Text style={styles.caption}>
       {pageType==='signup'?
@@ -106,6 +106,7 @@ const Auth = (props) => {
 const mapStateToProps= props=>{
  return{
     userDetails:props.user,
+    loader:props.user.loader,
     isLoggedIn:props.auth.isLoggedIn,
   };
 }
@@ -125,7 +126,6 @@ const styles = StyleSheet.create({
     marginBottom: '4%',
     marginTop: -60,
     textTransform:'uppercase'
-    // elevation:10,
   },
   caption: {
     color: 'black',

@@ -1,9 +1,5 @@
 import {types} from '../actionTypes'
 import {setToast} from './toastAction'
-import axios from 'axios'
-import messaging from '@react-native-firebase/messaging'
-import {Header} from 'react-native/Libraries/NewAppScreen'
-// import * as admin from "firebase-admin";
 import {FIREBASE_SERVER_KEY} from '@env'
 import { store } from '../store'
 
@@ -21,7 +17,6 @@ export const sendPushNotification = (data, token) => async dispatch => {
   if((data.how !== 'goto'&& !Object.keys(data.who).length) ||  !Object.keys(data.where).length || !data.how.length  ){
    dispatch(setToast('error', 'Select how , who and where first'))
   }else{
-  // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', data)
   let how = data.how.charAt(0).toUpperCase() + data.how.slice(1)
   fetch(`https://fcm.googleapis.com/fcm/send`, {
     method: 'POST',
@@ -53,24 +48,9 @@ export const sendPushNotification = (data, token) => async dispatch => {
     .then(res => console.log(res))
     .then(response => {
       console.log("data.who.name",data.who.name)
-      // console.log(response)
       dispatch(setToast('success',data.how==='goto'?`${data.how} ${data.where.name}` :  `Your message has been sent to ${data.who.name}`))
     })
     .catch(err => console.log(err))
-  //
-  // console.log("sendPsuhNotification==========",data,token)
-
-  // if(data.how.length && Object.keys(data.who).length && Object.keys(data.where).length){
-  //   let headers= new Headers({
-  //     'Content-Type':'application/json',
-  //     'Authorization':'key='+token
-  //   })
-  // let response = await fetch('https://fcm.googleapis.com/fcm/send',
-  // {method:'POST', headers, body:JSON.stringify})
-
-  // }else{
-  //     dispatch(setToast('error','select how , who and where!'))
-
   }
 }
 

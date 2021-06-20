@@ -1,15 +1,16 @@
 import React from 'react'
 import  MainStackNavigator from './src/navigation/MainStackNavigator'
-import{ NavigationContainer} from '@react-navigation/native'
 import {store} from './src/store/store'
 import {Provider} from 'react-redux'
+import {LogBox}from 'react-native'
+
 
 const App = () => {
+  LogBox.ignoreAllLogs()
+
   return (
     <Provider store={store}>
-      {/* <NavigationContainer> */}
         <MainStackNavigator/>
-      {/* </NavigationContainer> */}
     </Provider>
   )
 }

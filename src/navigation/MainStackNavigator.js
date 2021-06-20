@@ -40,39 +40,39 @@ const [initialRoute, setInitialRoute] = useState('Splash')
   console.log(props)
   
   useEffect(async () => {
-    // messaging() 
-    // .onNotificationOpenedApp( remoteMessage => {
-    //   setLoading(false)
-    //   console.log(
-    //     'Notification caused app to open from background state',
-    //     remoteMessage,
-    //   )
-    //   console.log('remoteMessage.data.type', remoteMessage.data.type)
-    //   // const navigation = props.navigation;
-      // isReadyRef.current = false;
-    //   if(remoteMessage.data.type){
+    messaging() 
+    .onNotificationOpenedApp( remoteMessage => {
+      setLoading(false)
+      console.log(
+        'Notification caused app to open from background state',
+        remoteMessage,
+      )
+      console.log('remoteMessage.data.type', remoteMessage.data.type)
+      // const navigation = props.navigation;
+      isReadyRef.current = false;
+      if(remoteMessage.data.type){
 
-    //     navigationRef.current.navigate(remoteMessage.data.type, {
-    //       screen:remoteMessage.data.type,
-    //       params: { data:remoteMessage.data.type}
-    //     })
-    //     setInitialRoute(remoteMessage.data.type())
-    //   }
-    //   // setInitialRoute(remoteMessage.data.type,()=>navigation.navigate(remoteMessage.data.type))
+        navigationRef.current.navigate(remoteMessage.data.type, {
+          screen:remoteMessage.data.type,
+          params: { data:remoteMessage.data.type}
+        })
+        setInitialRoute(remoteMessage.data.type())
+      }
+      // setInitialRoute(remoteMessage.data.type,()=>navigation.navigate(remoteMessage.data.type))
       
-    // })
+    })
 
-    //  messaging()
-    //   .getInitialNotification()
-    //   .then(remoteMessage => {
-    //     if (remoteMessage) {
-    //       console.log(
-    //         'Notification caused app to open from quit state:',
-    //         remoteMessage,
-    //       )
-    //     }
-    //     setLoading(false)
-    //   })
+     messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage,
+          )
+        }
+        setLoading(false)
+      })
     
       
 

@@ -59,9 +59,7 @@ export const getAllContacts=(callback)=>async(dispatch)=>{
         let response= await firestore().collection('Users').orderBy('name').get()
         if(response){
              let userDetails=[]
-            response.docs.forEach(doc =>{
-                // console.log(doc._data);
-                 userDetails.push(doc._data)});  
+            response.docs.forEach(doc => userDetails.push(doc._data));  
             dispatch({type:types.GET_ALL_CONTACTS_SUCCESS,payload:userDetails})
          }   
          callback && callback()
@@ -75,7 +73,6 @@ export const getAllContacts=(callback)=>async(dispatch)=>{
 
 export const updateFavourite=(favourites, type)=>async(dispatch)=>{
     try {
-        console.log("favourites=======================",favourites)
         const userid= await getAppStorage('auth')
         getUserDetails()
         firestore().collection('Users').doc(userid).update({
@@ -103,7 +100,6 @@ export const getUserDetails =(callback)=>async(dispatch)=>{
             dispatch({type:types.GET_USER_DETAILS_SUCCESS, payload:user._data})
             dispatch(getAllContacts())
             callback && callback('Home')
-            //    console.log("getUserDetails",user._data)
         }else{
             dispatch({type:types.GET_USER_DETAILS_FAILED})
              callback && callback('Profile')
@@ -111,7 +107,6 @@ export const getUserDetails =(callback)=>async(dispatch)=>{
         
     } catch (error) {
         dispatch({type:types.GET_USER_DETAILS_FAILED})
-
         console.log(error)   
     }
 }

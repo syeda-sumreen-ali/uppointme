@@ -11,7 +11,6 @@ import {connect} from 'react-redux'
 import {addFavouriteLocation, setToast} from '../store/actions'
 import Map from '../component/Map'
 import {TouchableOpacity} from 'react-native-gesture-handler'
-import { navigationRef } from '../navigation/RootNavigation'
 
 const AddNewLocation = props => {
   const [userName, setUserName] = useState('')
@@ -21,23 +20,19 @@ const AddNewLocation = props => {
   const handleSubmit = () => {
       let obj={name: userName, location: location}
       let arr = props.locations||[]
-      if(props.locations.length ){
-          if(props.locations.find(item=> item.name===userName || item.locations===userName)){
+
+      if(arr.length){
+          if(arr.find(item=> item.name===userName || item.location===location)){
             props.setToast('error', 'This favourite name or location already exist in your favourite locations')
           }else{
             arr.push(obj)
-            // console.log(arr)
             props.addFavouriteLocation(arr, 'add') 
           }
       }else{
         arr.push(obj)
-        // console.log(arr)
         props.addFavouriteLocation(arr, 'add')
-
       }
-    // props.onChangeFavourite(obj)
   }
-  console.log(props,"================================")
   return (
 
     <View style={styles.container}>
@@ -70,14 +65,13 @@ const AddNewLocation = props => {
         style={{
           width: '94%',
           height: 300,
-          //  backgroundColor:'red',
           overflow: 'hidden',
           marginHorizontal: '2%',
         }}>
         <Map location={location} setLocation={setLocation} />
       </View>
       <TouchableHighlight
-      // onPress={()=>handleSubmit()}
+    
         onPress={userName && location ? handleSubmit : () => {}}
         style={[
           styles.button,

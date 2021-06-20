@@ -33,11 +33,7 @@ const Home = props => {
       </View>
     </TouchableOpacity>
   )
-  console.log(props.pushNotificationData.how)
   return (
-    // <SafeAreaView>
-
-  
     <ScrollView style={{flex:1}}>
       <View style={styles.container}>
         {props.pushNotificationData.how
@@ -74,12 +70,10 @@ const Home = props => {
 </View>
       </View>
     </ScrollView>
-    // </SafeAreaView>
   )
 }
 
 const mapStateToProps = props => {
-  console.log(props.pushNotification)
   return {
     pushNotificationData: props.pushNotification,
     token: props.user.userDetails.token,

@@ -35,9 +35,10 @@ const Detail = (props) => {
       </View>
       <View style={{ marginTop: 20 }}>
 
-       {arr.map((item)=>(
+       {arr.map(((item,index)=>(
 
-        <TouchableOpacity 
+        <TouchableOpacity
+        key={index} 
           style={styles.square}
           onPress={() => {
             if(item==='goto' || item ==='bring' || item ==='send'){
@@ -47,14 +48,14 @@ const Detail = (props) => {
             }else {
 
             }
-          } }
+       } }
         >
           <View>
             <Text style={styles.buttonText}>{item}</Text>
           </View>
         </TouchableOpacity>
        )
-      )}
+      ))}
       </View>
     </View>
  

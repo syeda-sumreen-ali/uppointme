@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 
-function Settings(props) {
+const  Settings=(props)=> {
   const { navigation } = props
   return (
     <View style={styles.container}>
