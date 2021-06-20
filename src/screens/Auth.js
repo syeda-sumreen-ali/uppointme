@@ -104,8 +104,7 @@ const Auth = (props) => {
   );
 };
 const mapStateToProps= props=>{
-  console.log("zzzzzzzzzzzzzzzzzzzzzz", props.user)
-  return{
+ return{
     userDetails:props.user,
     isLoggedIn:props.auth.isLoggedIn,
   };
